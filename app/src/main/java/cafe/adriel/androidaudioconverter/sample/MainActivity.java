@@ -7,6 +7,8 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -16,15 +18,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class MainActivity2 extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
     ListView listView;
     String[] listItem;
-    List<String> names = new ArrayList<String>();
-
+    List<String> names = new ArrayList<>();
+    List<String> song_duration = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main2);
+        setContentView(R.layout.activity_main);
         final List<Uri> audioList = new ArrayList<Uri>();
 
         String[] projection = new String[]{
@@ -68,6 +70,7 @@ public class MainActivity2 extends AppCompatActivity {
                 // that represents the media file.
                 audioList.add(contentUri);
                 names.add(name);
+                song_duration.add(String.valueOf(duration));
             }
         }
         listView = (ListView) findViewById(R.id.list_of_audios);
@@ -79,11 +82,13 @@ public class MainActivity2 extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 // TODO Auto-generated method stub
-                Intent intent=new Intent(MainActivity2.this, ConvertFile.class);
+                Intent intent=new Intent(MainActivity.this, ConvertFile.class);
                 intent.putExtra("item",audioList.get(position));
+                intent.putExtra("duration",song_duration.get(position));
                 startActivity(intent);
             }
         });
+
     }
     class Audio {
         private final Uri uri;
@@ -97,5 +102,12 @@ public class MainActivity2 extends AppCompatActivity {
             this.duration = duration;
             this.size = size;
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflator=getMenuInflater();
+        inflator.inflate(R.menu.menu,menu);
+        return true;
     }
 }

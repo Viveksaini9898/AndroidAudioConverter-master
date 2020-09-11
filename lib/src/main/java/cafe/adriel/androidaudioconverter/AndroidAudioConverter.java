@@ -1,6 +1,7 @@
 package cafe.adriel.androidaudioconverter;
 
 import android.content.Context;
+import android.widget.Toast;
 
 import com.github.hiteshsondhi88.libffmpeg.FFmpeg;
 import com.github.hiteshsondhi88.libffmpeg.FFmpegExecuteResponseHandler;
@@ -16,16 +17,20 @@ import cafe.adriel.androidaudioconverter.model.AudioFormat;
 public class AndroidAudioConverter {
 
     private static boolean loaded;
-
+    String durationLeft,durationRight;
     private Context context;
-    private File audioFile;
+    private File audioFile,outputFile;
     private AudioFormat format;
     private IConvertCallback callback;
 
     private AndroidAudioConverter(Context context){
         this.context = context;
     }
-
+    public AndroidAudioConverter setDuration(String durationLeft,String durationRight){
+        this.durationLeft = durationLeft;
+        this.durationRight=durationRight;
+        return this;
+    }
     public static boolean isLoaded(){
         return loaded;
     }
@@ -65,11 +70,15 @@ public class AndroidAudioConverter {
         return new AndroidAudioConverter(context);
     }
 
-    public AndroidAudioConverter setFile(File originalFile) {
+    public AndroidAudioConverter setInputFile(File originalFile) {
         this.audioFile = originalFile;
         return this;
     }
-
+    public AndroidAudioConverter setOutputFile(File convertedFile)
+    {
+        this.outputFile=convertedFile;
+       return  this;
+    }
     public AndroidAudioConverter setFormat(AudioFormat format) {
         this.format = format;
         return this;
@@ -93,8 +102,9 @@ public class AndroidAudioConverter {
             callback.onFailure(new IOException("Can't read the file. Missing permission?"));
             return;
         }
-        final File convertedFile = getConvertedFile(audioFile, format);
-        final String[] cmd = new String[]{"-y", "-i", audioFile.getPath(), convertedFile.getPath()};
+        final File convertedFile = getConvertedFile(outputFile, format);
+        convertedFile.getPath();
+        final String[] cmd = new String[]{"-i" ,audioFile.getPath(), "-ss",durationLeft, "-to" ,durationRight ,"-c" ,"copy",convertedFile.getPath()};
         try {
             FFmpeg.getInstance(context).execute(cmd, new FFmpegExecuteResponseHandler() {
                         @Override

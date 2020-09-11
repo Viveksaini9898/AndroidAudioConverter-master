@@ -1,15 +1,22 @@
 package cafe.adriel.androidaudioconverter.sample;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,21 +30,27 @@ import cafe.adriel.androidaudioconverter.callback.IConvertCallback;
 import cafe.adriel.androidaudioconverter.model.AudioFormat;
 
 public class ConvertFile extends AppCompatActivity {
-    int min,max,difference;
-    TextView left,right;
+    int min, max, difference;
+    TextView left, right, differenceText;
     RangeSeekBar rangeSeekBar;
     long duration;
     String duration_left, durationRight;
+    File selectedFile;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.convert);
-        left=(TextView) findViewById(R.id.leftText);
-        right=(TextView) findViewById(R.id.rightText);
-         duration=Integer.parseInt(getIntent().getStringExtra("duration"));
-        rangeSeekBar=(RangeSeekBar)findViewById(R.id.rangeseekbar);
-       rangeSeekBar.setRangeValues(0,duration);
-        durationRight=String.format("%02d:%02d:%02d",
+        left = (TextView) findViewById(R.id.leftText);
+        right = (TextView) findViewById(R.id.rightText);
+        differenceText = (TextView) findViewById(R.id.difference);
+        duration = Integer.parseInt(getIntent().getStringExtra("duration"));
+        rangeSeekBar = (RangeSeekBar) findViewById(R.id.rangeseekbar);
+        rangeSeekBar.setRangeValues(0, duration);
+        Bundle extras = getIntent().getExtras();
+        Uri uri = (Uri) extras.get("item");
+        selectedFile = new File(getRealPathFromURI(uri));
+        durationRight = String.format("%02d:%02d:%02d",
                 TimeUnit.MILLISECONDS.toHours(duration),
                 TimeUnit.MILLISECONDS.toMinutes(duration) -
                         TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(duration)),
@@ -48,16 +61,22 @@ public class ConvertFile extends AppCompatActivity {
         rangeSeekBar.setOnRangeSeekBarChangeListener(new RangeSeekBar.OnRangeSeekBarChangeListener() {
             @Override
             public void onRangeSeekBarValuesChanged(RangeSeekBar bar, Object minValue, Object maxValue) {
-                min=(int)bar.getSelectedMinValue();
-               max=(int)bar.getSelectedMaxValue();
-                difference=(max-min)/1000;
-                duration_left=String.format("%02d:%02d:%02d",
+                min = (int) bar.getSelectedMinValue();
+                max = (int) bar.getSelectedMaxValue();
+                difference = max - min;
+                String differenceString = String.format("%02d:%02d:%02d",
+                        TimeUnit.MILLISECONDS.toHours(difference),
+                        TimeUnit.MILLISECONDS.toMinutes(difference) -
+                                TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(difference)),
+                        TimeUnit.MILLISECONDS.toSeconds(difference) -
+                                TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(difference)));
+                duration_left = String.format("%02d:%02d:%02d",
                         TimeUnit.MILLISECONDS.toHours(min),
                         TimeUnit.MILLISECONDS.toMinutes(min) -
                                 TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(min)),
                         TimeUnit.MILLISECONDS.toSeconds(min) -
                                 TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(min)));
-                durationRight=String.format("%02d:%02d:%02d",
+                durationRight = String.format("%02d:%02d:%02d",
                         TimeUnit.MILLISECONDS.toHours(max),
                         TimeUnit.MILLISECONDS.toMinutes(max) -
                                 TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(max)),
@@ -65,6 +84,7 @@ public class ConvertFile extends AppCompatActivity {
                                 TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(max)));
                 left.setText(duration_left);
                 right.setText(durationRight);
+                differenceText.setText(differenceString);
             }
         });
         if (getSupportActionBar() != null) {
@@ -75,9 +95,10 @@ public class ConvertFile extends AppCompatActivity {
         Util.requestPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
         Util.requestPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
     }
-    public String getRealPathFromURI (Uri contentUri) {
+
+    public String getRealPathFromURI(Uri contentUri) {
         String path = null;
-        String[] proj = { MediaStore.MediaColumns.DATA };
+        String[] proj = {MediaStore.MediaColumns.DATA};
         Cursor cursor = getContentResolver().query(contentUri, proj, null, null, null);
         if (cursor.moveToFirst()) {
             int column_index = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
@@ -86,48 +107,62 @@ public class ConvertFile extends AppCompatActivity {
         cursor.close();
         return path;
     }
-    public void convertAudio(View v){
-        /**
-         *  Update with a valid audio file!
-         *  Supported formats: {@link AndroidAudioConverter.AudioFormat}
-         */
-        File wavFile = new File(Environment.getExternalStorageDirectory(), "trimmed.mp3");
-        Bundle extras=getIntent().getExtras();
-        Uri uri=(Uri) extras.get("item");
-        File selectedFile=new File(getRealPathFromURI(uri));
-        Log.d("filepath",selectedFile.getPath());
-        Toast.makeText(getApplicationContext(),selectedFile.getPath(),Toast.LENGTH_LONG).show();
-        IConvertCallback callback = new IConvertCallback() {
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflator = getMenuInflater();
+        inflator.inflate(R.menu.menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
-            public void onSuccess(File convertedFile) {
-                Toast.makeText(ConvertFile.this, "SUCCESS: " + convertedFile.getPath(), Toast.LENGTH_LONG).show();
+            public boolean onMenuItemClick(MenuItem menuItem) {
+
+                CustomDialogClass alertDialog = new CustomDialogClass(ConvertFile.this);
+                alertDialog.show();
+                return true;
             }
-            @Override
-            public void onFailure(Exception error) {
-                Toast.makeText(ConvertFile.this, "ERROR: " + error.getMessage(), Toast.LENGTH_LONG).show();
-                Log.d("Error",error.toString());
-            }
-        };
-        Toast.makeText(this, "Converting audio file...", Toast.LENGTH_SHORT).show();
-        Log.d("Filename",selectedFile.getPath());
-       /* String differenceString=String.format("%02d:%02d:%02d",
-                TimeUnit.MILLISECONDS.toHours(difference),
-                TimeUnit.MILLISECONDS.toMinutes(difference) -
-                        TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(difference)),
-                TimeUnit.MILLISECONDS.toSeconds(difference) -
-                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(difference)));*/
-        if(selectedFile!=null) {
-            AndroidAudioConverter.with(this)
-                    .setInputFile(selectedFile)
-                    .setOutputFile(wavFile)
-                    .setFormat(AudioFormat.MP3)
-                    .setCallback(callback)
-                    .setDuration(duration_left,durationRight)
-                    .convert();
-        }
-        else
+        });
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void convertAudio(String output_file_name,AudioFormat format) {
+        File wavFile = new File(Environment.getExternalStorageDirectory(), output_file_name);
+        if(wavFile.exists())
         {
-            Toast.makeText(ConvertFile.this,"File not passed", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(),"file name already exists",Toast.LENGTH_LONG).show();
+        }
+        else {
+            Log.d("filepath", selectedFile.getPath());
+            Toast.makeText(getApplicationContext(), selectedFile.getPath(), Toast.LENGTH_LONG).show();
+            IConvertCallback callback = new IConvertCallback() {
+                @Override
+                public void onSuccess(File convertedFile) {
+                    Toast.makeText(ConvertFile.this, "SUCCESS: " + convertedFile.getPath(), Toast.LENGTH_LONG).show();
+                }
+
+                @Override
+                public void onFailure(Exception error) {
+                    Toast.makeText(ConvertFile.this, "ERROR: " + error.getMessage(), Toast.LENGTH_LONG).show();
+                    Log.d("Error", error.toString());
+                }
+            };
+            Toast.makeText(ConvertFile.this, "Converting audio file...", Toast.LENGTH_SHORT).show();
+            Log.d("Filename", selectedFile.getPath());
+
+            if (selectedFile != null) {
+                AndroidAudioConverter.with(ConvertFile.this)
+                        .setInputFile(selectedFile)
+                        .setOutputFile(wavFile)
+                        .setFormat(AudioFormat.MP3)
+                        .setCallback(callback)
+                        .setDuration(duration_left, durationRight)
+                        .convert();
+            } else {
+                Toast.makeText(ConvertFile.this, "File not passed", Toast.LENGTH_LONG).show();
+            }
         }
     }
 }

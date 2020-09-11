@@ -5,7 +5,6 @@
        android:id="@+id/done"
       android:icon="@drawable/done"
       android:title="done"
-      android:onClick="convertAudio"
       app:showAsAction="always"
       />
 </menu>

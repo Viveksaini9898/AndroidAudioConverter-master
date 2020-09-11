@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">AndroidAudioConverter</string>
+    <string name="cancel">CANCEL</string>
+    <string name="convert">CONVERT</string>
+    <array name="formats">
+        <item>MP3</item>
+        <item>WAV</item>
+        <item>AAC</item>
+        <item>M4A</item>
+    </array>
 </resources>

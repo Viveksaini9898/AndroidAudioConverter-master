@@ -21,7 +21,7 @@ public class CustomDialogClass extends Dialog implements
     Spinner spinner;
     public CustomDialogClass(ConvertFile a) {
         super(a);
-       
+
         this.c = a;
     }
 

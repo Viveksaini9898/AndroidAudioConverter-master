@@ -1,10 +1,14 @@
 package cafe.adriel.androidaudioconverter.sample;
 
+import android.Manifest;
 import android.content.ContentUris;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -14,6 +18,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +34,25 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         final List<Uri> audioList = new ArrayList<Uri>();
-
+        String permission=Manifest.permission.READ_EXTERNAL_STORAGE;
+            // Checking if permission is not granted
+            if (ContextCompat.checkSelfPermission(
+                    MainActivity.this,
+                    permission)
+                    == PackageManager.PERMISSION_DENIED) {
+                ActivityCompat
+                        .requestPermissions(
+                                MainActivity.this,
+                                new String[] { permission },
+                                1);
+            }
+            else {
+                Toast
+                        .makeText(MainActivity.this,
+                                "Permission already granted",
+                                Toast.LENGTH_SHORT)
+                        .show();
+            }
         String[] projection = new String[]{
                 MediaStore.Audio.Media._ID,
                 MediaStore.Audio.Media.DISPLAY_NAME,
@@ -104,5 +127,4 @@ public class MainActivity extends AppCompatActivity {
             this.size = size;
         }
     }
-
 }

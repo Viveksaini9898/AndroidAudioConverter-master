@@ -19,10 +19,10 @@ public class AndroidAudioConverter {
     private static boolean loaded;
     String durationLeft,durationRight;
     private Context context;
-    private File audioFile,outputFile;
+    private File audioFile,outputFile,convertedFile;
     private AudioFormat format;
     private IConvertCallback callback;
-
+    private String[] cmd_to_convert=new String[20];
     private AndroidAudioConverter(Context context){
         this.context = context;
     }
@@ -102,11 +102,9 @@ public class AndroidAudioConverter {
             callback.onFailure(new IOException("Can't read the file. Missing permission?"));
             return;
         }
-        final File convertedFile = getConvertedFile(outputFile, format);
-        convertedFile.getPath();
-        final String[] cmd = new String[]{"-i" ,audioFile.getPath(), "-ss",durationLeft, "-to" ,durationRight ,"-c" ,"copy",convertedFile.getPath()};
+        final String[] cmd_to_trim = new String[]{"-i" ,audioFile.getPath(), "-ss",durationLeft, "-to" ,durationRight ,"-c" ,"copy",outputFile.getPath()};
         try {
-            FFmpeg.getInstance(context).execute(cmd, new FFmpegExecuteResponseHandler() {
+            FFmpeg.getInstance(context).execute(cmd_to_trim, new FFmpegExecuteResponseHandler() {
                         @Override
                         public void onStart() {
 
@@ -119,7 +117,9 @@ public class AndroidAudioConverter {
 
                         @Override
                         public void onSuccess(String message) {
-                            callback.onSuccess(convertedFile);
+                            final File convertedFile = getConvertedFile(outputFile, format);
+                            cmd_to_convert=new String[]{"-i", outputFile.getPath(),convertedFile.getPath()};
+                            callback.onSuccess(outputFile);
                         }
 
                         @Override
@@ -132,6 +132,32 @@ public class AndroidAudioConverter {
 
                         }
                     });
+            FFmpeg.getInstance(context).execute(cmd_to_convert, new FFmpegExecuteResponseHandler() {
+                @Override
+                public void onStart() {
+
+                }
+
+                @Override
+                public void onProgress(String message) {
+
+                }
+
+                @Override
+                public void onSuccess(String message) {
+                    callback.onSuccess(convertedFile);
+                }
+
+                @Override
+                public void onFailure(String message) {
+                    callback.onFailure(new IOException(message));
+                }
+
+                @Override
+                public void onFinish() {
+
+                }
+            });
         } catch (Exception e){
             callback.onFailure(e);
         }

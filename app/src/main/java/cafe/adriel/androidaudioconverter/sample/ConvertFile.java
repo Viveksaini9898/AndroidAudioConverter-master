@@ -156,7 +156,7 @@ public class ConvertFile extends AppCompatActivity {
                 AndroidAudioConverter.with(ConvertFile.this)
                         .setInputFile(selectedFile)
                         .setOutputFile(wavFile)
-                        .setFormat(AudioFormat.MP3)
+                        .setFormat(format)
                         .setCallback(callback)
                         .setDuration(duration_left, durationRight)
                         .convert();

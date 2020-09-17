@@ -31,7 +31,9 @@ public class CustomDialogClass extends Dialog implements
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.dialoglayout);
         filename=findViewById(R.id.filename);
-        filename.setText("Audio_Converter_"+c.selectedFile.getName());
+        String nameHint=c.selectedFile.getName();
+        int length=nameHint.length();
+        filename.setText("Audio_Converter_"+nameHint.substring(0,length-4));
         spinner=findViewById(R.id.format);
         Spinner spinner =findViewById(R.id.format);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(c,
@@ -77,7 +79,7 @@ public class CustomDialogClass extends Dialog implements
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.convert:
-                c.convertAudio(filename.getText().toString(),format);
+                c.convertAudio(filename.getText().toString()+".mp3",format);
                 break;
             case R.id.cancel:
                 dismiss();

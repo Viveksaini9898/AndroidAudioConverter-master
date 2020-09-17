@@ -25,15 +25,22 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         >
+        <Button
+            android:id="@+id/minus"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_toLeftOf="@+id/leftText"
+            android:text="-"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/semi_circular_left"
+            />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="30dp"
         android:id="@+id/leftText"
         android:text=""
         android:gravity="center"
-        android:layout_alignParentLeft="true"
         android:textColor="@android:color/white"
-        android:layout_marginLeft="10dp"
         android:background="@android:color/holo_red_dark"
         />
         <TextView
@@ -56,6 +63,27 @@
             android:layout_marginRight="10dp"
             />
     </RelativeLayout>
+    <cafe.adriel.androidaudioconverter.sample.AudioWaveformView
+        android:id="@+id/waveform"
+        android:layout_marginTop="50dp"
+        android:layout_width="fill_parent"
+        android:layout_below="@+id/timings"
+        android:layout_height="300dp" />
+
+   <!-- <com.semantive.waveformandroid.waveform.view.MarkerView android:id="@+id/startmarker"
+        android:nextFocusDown="@+id/endmarker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/marker_left"
+        android:contentDescription="@string/start_marker" />
+
+    <com.semantive.waveformandroid.waveform.view.MarkerView android:id="@+id/endmarker"
+        android:nextFocusUp="@+id/startmarker"
+        android:nextFocusDown="@+id/info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/marker_right"
+        android:contentDescription="@string/end_marker" />
     <ImageView
         android:id="@+id/spectrum"
         android:layout_marginTop="50dp"
@@ -65,13 +93,23 @@
         android:layout_marginRight="50dp"
         android:layout_below="@+id/timings"
         android:foreground="@mipmap/music"
-        />
+        />-->
     <org.florescu.android.rangeseekbar.RangeSeekBar
-        android:layout_below="@+id/spectrum"
+        android:layout_below="@+id/waveform"
         android:layout_width="match_parent"
         android:id="@+id/rangeseekbar"
         android:layout_height="wrap_content"
         android:paddingRight="50dp"
         app:valuesAboveThumbs="false"
         android:paddingLeft="50dp"/>
+    <ImageView
+        android:id="@+id/play"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_alignParentRight="true"
+        android:src="@mipmap/ic_launcher_play"
+        android:layout_marginRight="30dp"
+        android:layout_below="@+id/rangeseekbar"
+        />
 </RelativeLayout>

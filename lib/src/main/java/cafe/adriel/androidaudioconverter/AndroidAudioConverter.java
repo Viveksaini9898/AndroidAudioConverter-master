@@ -1,7 +1,8 @@
 package cafe.adriel.androidaudioconverter;
 
 import android.content.Context;
-import android.widget.Toast;
+import android.os.Environment;
+import android.util.Log;
 
 import com.github.hiteshsondhi88.libffmpeg.FFmpeg;
 import com.github.hiteshsondhi88.libffmpeg.FFmpegExecuteResponseHandler;
@@ -19,10 +20,9 @@ public class AndroidAudioConverter {
     private static boolean loaded;
     String durationLeft,durationRight;
     private Context context;
-    private File audioFile,outputFile,convertedFile;
+    private File audioFile,outputFile;
     private AudioFormat format;
     private IConvertCallback callback;
-    private String[] cmd_to_convert=new String[20];
     private AndroidAudioConverter(Context context){
         this.context = context;
     }
@@ -102,7 +102,8 @@ public class AndroidAudioConverter {
             callback.onFailure(new IOException("Can't read the file. Missing permission?"));
             return;
         }
-        final String[] cmd_to_trim = new String[]{"-i" ,audioFile.getPath(), "-ss",durationLeft, "-to" ,durationRight ,"-c" ,"copy",outputFile.getPath()};
+        outputFile=getConvertedFile(outputFile,format);
+        final String[] cmd_to_trim = new String[]{"-i" ,audioFile.getPath(), "-ss",durationLeft, "-to" ,durationRight ,"-c" ,"copy", "-f","wav",outputFile.getPath()};
         try {
             FFmpeg.getInstance(context).execute(cmd_to_trim, new FFmpegExecuteResponseHandler() {
                         @Override
@@ -112,16 +113,12 @@ public class AndroidAudioConverter {
 
                         @Override
                         public void onProgress(String message) {
-
                         }
 
                         @Override
                         public void onSuccess(String message) {
-                            final File convertedFile = getConvertedFile(outputFile, format);
-                            cmd_to_convert=new String[]{"-i", outputFile.getPath(),convertedFile.getPath()};
                             callback.onSuccess(outputFile);
                         }
-
                         @Override
                         public void onFailure(String message) {
                             callback.onFailure(new IOException(message));
@@ -132,40 +129,14 @@ public class AndroidAudioConverter {
 
                         }
                     });
-            FFmpeg.getInstance(context).execute(cmd_to_convert, new FFmpegExecuteResponseHandler() {
-                @Override
-                public void onStart() {
-
-                }
-
-                @Override
-                public void onProgress(String message) {
-
-                }
-
-                @Override
-                public void onSuccess(String message) {
-                    callback.onSuccess(convertedFile);
-                }
-
-                @Override
-                public void onFailure(String message) {
-                    callback.onFailure(new IOException(message));
-                }
-
-                @Override
-                public void onFinish() {
-
-                }
-            });
-        } catch (Exception e){
+        }catch (Exception e){
             callback.onFailure(e);
         }
     }
 
     private static File getConvertedFile(File originalFile, AudioFormat format){
-        String[] f = originalFile.getPath().split("\\.");
-        String filePath = originalFile.getPath().replace(f[f.length - 1], format.getFormat());
+        String[] f = originalFile.getAbsolutePath().split("\\.");
+        String filePath =originalFile.getAbsolutePath().replace(f[f.length - 1],format.getFormat());
         return new File(filePath);
     }
 }

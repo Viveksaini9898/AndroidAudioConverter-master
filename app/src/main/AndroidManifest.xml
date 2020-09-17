@@ -10,6 +10,9 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="@string/google_app_id"/>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -17,8 +20,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity android:name=".ConvertFile">
         </activity>
+        <activity android:name=".SelectSectionActivity" android:parentActivityName=".TrimAudioActivity"/>
+        <activity android:name=".PlayMusicActivity" android:parentActivityName=".MainActivity"/>
+        <activity
+            android:name=".TrimAudioActivity"
+            android:label="@string/choose_the_audio"
+            android:parentActivityName=".MainActivity" />
+
+
     </application>
 
 </manifest>

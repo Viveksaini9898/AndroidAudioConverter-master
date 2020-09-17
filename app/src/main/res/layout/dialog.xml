@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/dialogLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingStart="20dp"
+    android:paddingEnd="20dp"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp"
+    android:orientation="vertical">
+    <TextView
+        android:layout_marginTop="10dp"
+        android:text="Convert"
+        android:textSize="16dp"
+        android:textColor="@color/colorBlack"
+        android:textStyle="bold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+    <TextView
+        android:layout_marginTop="10dp"
+        android:text="File Name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textColor="@color/colorGrey"
+    />
+    <EditText
+        android:id="@+id/etFilename"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollHorizontally="true"
+        android:textColor="@color/colorLightGrey"
+        android:singleLine="true"
+
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Format"
+            android:paddingEnd="10dp"
+            android:layout_weight="0"
+            android:textStyle="bold"
+            android:textColor="@color/colorGrey"
+            />
+        <Spinner
+            android:id="@+id/sFormat"
+            android:layout_weight="1"
+            android:paddingStart="60dp"
+            android:outlineAmbientShadowColor="@color/colorWhite"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:entries="@array/formats"
+
+            />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="right"
+        android:layout_marginTop="30dp"
+        >
+
+        <TextView
+            android:id="@+id/tvCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="CENCLE"
+            android:gravity="center"
+            android:padding="8dp"
+            android:layout_marginEnd="5dp"
+            android:textColor="#9c0000"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvConvert"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@drawable/button_background"
+            android:text="CONVERT"
+            android:gravity="center"
+            android:textColor="@color/colorWhite"
+            android:textStyle="bold"
+
+            />
+    </LinearLayout>
+</LinearLayout>

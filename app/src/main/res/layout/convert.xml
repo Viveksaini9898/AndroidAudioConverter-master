@@ -5,19 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="cafe.adriel.androidaudioconverter.sample.ConvertFile">
-    <!--<Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:padding="20dp"
-        android:layout_marginTop="50dp"
-        android:text="CONVERT AUDIO"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textColor="@android:color/white"
-        android:onClick="convertAudio"
-        android:background="@android:color/holo_red_dark"
-        android:layout_below="@+id/rangeseekbar"
-        style="@style/Widget.AppCompat.Button.Borderless"/>-->
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:id="@+id/timings"

@@ -1,40 +1,41 @@
 package cafe.adriel.androidaudioconverter.sample;
 
-import android.app.Activity;
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
+
 import cafe.adriel.androidaudioconverter.model.AudioFormat;
-public class CustomDialogClass extends Dialog implements
+public class CustomDialog extends Dialog implements
         android.view.View.OnClickListener {
     AudioFormat format;
-    public ConvertFile c;
-    public Dialog d;
-    public Button convert,cancel;
+    public ConvertFile convertFile;
+    public Dialog dialog;
+    public TextView convert,cancel;
     public EditText filename;
     Spinner spinner;
-    public CustomDialogClass(ConvertFile a) {
+    public CustomDialog(ConvertFile a) {
         super(a);
-
-        this.c = a;
+        this.convertFile = a;
     }
 
+    @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.dialoglayout);
-        filename=findViewById(R.id.filename);
-        filename.setText("Audio_Converter_"+c.selectedFile.getName());
-        spinner=findViewById(R.id.format);
-        Spinner spinner =findViewById(R.id.format);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(c,
+        setContentView(R.layout.dialog);
+        filename=findViewById(R.id.etFilename);
+        filename.setText("Audio_Converter_"+convertFile.selectedFile.getName());
+        spinner=findViewById(R.id.sFormat);
+        Spinner spinner =findViewById(R.id.sFormat);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(convertFile,
                 R.array.formats, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
@@ -66,20 +67,20 @@ public class CustomDialogClass extends Dialog implements
                                           }
 
         );
-        convert = (Button) findViewById(R.id.convert);
-        cancel = (Button) findViewById(R.id.cancel);
+        convert = (TextView) findViewById(R.id.tvConvert);
+        cancel = (TextView) findViewById(R.id.tvCancel);
         convert.setOnClickListener(this);
         cancel.setOnClickListener(this);
 
     }
 
     @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.convert:
-                c.convertAudio(filename.getText().toString(),format);
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.tvConvert:
+                convertFile.convertAudio(filename.getText().toString(),format);
                 break;
-            case R.id.cancel:
+            case R.id.tvCancel:
                 dismiss();
                 break;
             default:

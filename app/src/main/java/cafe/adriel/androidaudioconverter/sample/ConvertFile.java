@@ -1,24 +1,22 @@
 package cafe.adriel.androidaudioconverter.sample;
 
 import android.Manifest;
-import android.content.DialogInterface;
 import android.database.Cursor;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.semantive.waveformandroid.waveform.view.WaveformView;
 
 import org.florescu.android.rangeseekbar.RangeSeekBar;
 
@@ -36,16 +34,18 @@ public class ConvertFile extends AppCompatActivity {
     long duration;
     String duration_left, durationRight;
     File selectedFile;
+    private WaveformView waveformView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.convert);
+        setContentView(R.layout.editor);
         left = (TextView) findViewById(R.id.leftText);
         right = (TextView) findViewById(R.id.rightText);
         differenceText = (TextView) findViewById(R.id.difference);
         duration = Integer.parseInt(getIntent().getStringExtra("duration"));
         rangeSeekBar = (RangeSeekBar) findViewById(R.id.rangeseekbar);
+        waveformView=findViewById(R.id.waveform);
         rangeSeekBar.setRangeValues(0, duration);
         Bundle extras = getIntent().getExtras();
         Uri uri = (Uri) extras.get("item");
@@ -120,7 +120,7 @@ public class ConvertFile extends AppCompatActivity {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
 
-                CustomDialogClass alertDialog = new CustomDialogClass(ConvertFile.this);
+                CustomDialog alertDialog = new CustomDialog(ConvertFile.this);
                 alertDialog.show();
                 return true;
             }

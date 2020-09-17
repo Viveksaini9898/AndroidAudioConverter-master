@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:orientation="vertical">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:id="@+id/timings"
+            android:layout_marginTop="50dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:id="@+id/leftText"
+                android:text="00:00"
+                android:gravity="center"
+                android:layout_alignParentLeft="true"
+                android:textColor="@android:color/white"
+                android:layout_marginLeft="10dp"
+                android:background="@android:color/holo_red_dark"
+                />
+            <TextView
+                android:id="@+id/difference"
+                android:text=""
+                android:textColor="@android:color/holo_red_dark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:id="@+id/rightText"
+                android:gravity="center"
+                android:background="@android:color/holo_red_dark"
+                android:layout_alignParentRight="true"
+                android:textColor="@android:color/white"
+                android:text=""
+                android:layout_marginRight="10dp"
+                />
+        </RelativeLayout>
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                >
+
+                <cafe.adriel.androidaudioconverter.sample.AudioWaveformView
+                    android:id="@+id/waveform"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="40dp"
+                    />
+
+                <cafe.adriel.androidaudioconverter.sample.MarkerView
+                    android:id="@+id/endmarker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@+id/waveform"
+                    android:background="?selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/end_marker"
+                    android:nextFocusUp="@+id/startmarker"
+                    android:nextFocusDown="@+id/info"
+                    android:src="@drawable/end_dragger" />
+
+                <cafe.adriel.androidaudioconverter.sample.MarkerView
+                    android:id="@+id/startmarker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:background="?selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/start_marker"
+                    android:nextFocusDown="@+id/endmarker"
+                    android:src="@drawable/start_dragger"/>
+
+            </RelativeLayout>
+
+    <TextView
+            android:id="@+id/info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:nextFocusDown="@+id/play"
+            android:nextFocusUp="@+id/endmarker"
+            android:text="Demo"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="62dp"
+            android:gravity="center">
+
+            <ImageButton
+                android:id="@+id/rew"
+                style="@android:style/MediaButton"
+                android:layout_width="64dp"
+                android:layout_height="60dp"
+                android:layout_marginBottom="6dp"
+                android:layout_marginTop="6dp"
+                android:background="?selectableItemBackgroundBorderless"
+                android:contentDescription="@string/rewind"
+                android:src="@drawable/skip_backward"/>
+
+            <ImageButton
+                android:id="@+id/play"
+                style="@android:style/MediaButton"
+                android:layout_width="80dp"
+                android:layout_height="60dp"
+                android:layout_marginBottom="6dp"
+                android:layout_marginTop="6dip"
+                android:background="?selectableItemBackgroundBorderless"
+                android:contentDescription="@string/play"
+                android:src="@drawable/play"/>
+
+            <ImageButton
+                android:id="@+id/ffwd"
+                style="@android:style/MediaButton"
+                android:layout_width="64dp"
+                android:layout_height="60dp"
+                android:layout_marginBottom="6dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="6dp"
+                android:background="?selectableItemBackgroundBorderless"
+                android:contentDescription="@string/ffwd"
+                android:src="@drawable/skip_forward"/>
+
+        </LinearLayout>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:id="@+id/Save"
+        android:text="SAVE"
+        android:textStyle="bold"
+        android:textColor="@color/colorBlack"
+        />
+</LinearLayout>

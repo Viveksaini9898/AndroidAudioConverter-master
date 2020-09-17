@@ -1,39 +1,32 @@
 package cafe.adriel.androidaudioconverter.sample;
 
 import android.Manifest;
-import android.content.ContentUris;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.net.Uri;
-import android.provider.MediaStore;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
     ListView listView;
     String[] listItem;
     List<String> names = new ArrayList<>();
     List<String> song_duration = new ArrayList<>();
+    private LinearLayout trimAudio;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        final List<Uri> audioList = new ArrayList<Uri>();
+        setContentView(R.layout.main);
+        trimAudio=(LinearLayout)findViewById(R.id.trim_audio);
+     //  final List<Uri> audioList = new ArrayList<Uri>();
         String permission=Manifest.permission.READ_EXTERNAL_STORAGE;
             // Checking if permission is not granted
             if (ContextCompat.checkSelfPermission(
@@ -47,13 +40,27 @@ public class MainActivity extends AppCompatActivity {
                                 1);
             }
             else {
-                Toast
+                trimAudio.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent=new Intent(MainActivity.this,TrimAudioActivity.class);
+                        startActivity(intent);
+                    }
+                });
+
+
+            }
+                /*Toast
                         .makeText(MainActivity.this,
                                 "Permission already granted",
                                 Toast.LENGTH_SHORT)
-                        .show();
-            }
-        String[] projection = new String[]{
+                        .show();*/
+            }/*else{
+
+            Intent i = new Intent(MainActivity.this, RingdroidSelectActivity.class);
+            startActivity(i);
+        }*/
+       /* String[] projection = new String[]{
                 MediaStore.Audio.Media._ID,
                 MediaStore.Audio.Media.DISPLAY_NAME,
                 MediaStore.Audio.Media.DURATION,
@@ -97,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
                 song_duration.add(String.valueOf(duration));
             }
         }
-        listView = (ListView) findViewById(R.id.list_of_audios);
+       listView = (ListView) findViewById(R.id.list_of_audios);
         final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, android.R.id.text1, names);
         listView.setAdapter(adapter);
@@ -107,13 +114,14 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 // TODO Auto-generated method stub
                 Intent intent=new Intent(MainActivity.this, ConvertFile.class);
-                intent.putExtra("item",audioList.get(position));
+               intent.putExtra("item",audioList.get(position));
                 intent.putExtra("duration",song_duration.get(position));
                 startActivity(intent);
             }
         });
 
-    }
+    }*/
+/*
     class Audio {
         private final Uri uri;
         private final String name;
@@ -127,4 +135,5 @@ public class MainActivity extends AppCompatActivity {
             this.size = size;
         }
     }
+*/
 }

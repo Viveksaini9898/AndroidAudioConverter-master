@@ -23,10 +23,10 @@
 
         <activity android:name=".ConvertFile">
         </activity>
-        <activity android:name=".SelectSectionActivity" android:parentActivityName=".TrimAudioActivity"/>
+        <activity android:name=".TrimAudioActivity" android:parentActivityName=".AudioSelectActivity"/>
         <activity android:name=".PlayMusicActivity" android:parentActivityName=".MainActivity"/>
         <activity
-            android:name=".TrimAudioActivity"
+            android:name=".AudioSelectActivity"
             android:label="@string/choose_the_audio"
             android:parentActivityName=".MainActivity" />
 

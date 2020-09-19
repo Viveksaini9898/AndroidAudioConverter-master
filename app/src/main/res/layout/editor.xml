@@ -19,18 +19,18 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
-                android:id="@+id/leftText"
+                android:id="@+id/tvLeftText"
                 android:text="00:00"
                 android:gravity="center"
                 android:layout_alignParentLeft="true"
                 android:textColor="@android:color/white"
                 android:layout_marginLeft="10dp"
-                android:background="@android:color/holo_red_dark"
+                android:background="@color/colorRed"
                 />
             <TextView
-                android:id="@+id/difference"
+                android:id="@+id/tvDifference"
                 android:text=""
-                android:textColor="@android:color/holo_red_dark"
+                android:textColor="@color/colorBlack"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
@@ -38,57 +38,57 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
-                android:id="@+id/rightText"
+                android:id="@+id/tvRightText"
                 android:gravity="center"
-                android:background="@android:color/holo_red_dark"
                 android:layout_alignParentRight="true"
-                android:textColor="@android:color/white"
-                android:text=""
+                android:textColor="@color/colorWhite"
+                android:text="00:00"
+                android:background="@color/colorRed"
                 android:layout_marginRight="10dp"
                 />
         </RelativeLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0px"
+        android:layout_margin="10dp"
+        android:layout_weight="1"
+        >
 
-            <RelativeLayout
-                android:layout_width="match_parent"
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <cafe.adriel.androidaudioconverter.sample.AudioWaveformView
+                android:id="@+id/waveform"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"/>
+
+            <cafe.adriel.androidaudioconverter.sample.MarkerView
+                android:id="@+id/endmarker"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                >
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:background="?selectableItemBackgroundBorderless"
+                android:contentDescription="@string/end_marker"
+                android:nextFocusDown="@+id/info"
+                android:nextFocusUp="@+id/startmarker"
+                android:src="@drawable/end_dragger"/>
 
-                <cafe.adriel.androidaudioconverter.sample.AudioWaveformView
-                    android:id="@+id/waveform"
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="40dp"
-                    />
+            <cafe.adriel.androidaudioconverter.sample.MarkerView
+                android:id="@+id/startmarker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:background="?selectableItemBackgroundBorderless"
+                android:contentDescription="@string/start_marker"
+                android:nextFocusDown="@+id/endmarker"
+                android:src="@drawable/start_dragger"/>
 
-                <cafe.adriel.androidaudioconverter.sample.MarkerView
-                    android:id="@+id/endmarker"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_below="@+id/waveform"
-                    android:background="?selectableItemBackgroundBorderless"
-                    android:contentDescription="@string/end_marker"
-                    android:nextFocusUp="@+id/startmarker"
-                    android:nextFocusDown="@+id/info"
-                    android:src="@drawable/end_dragger" />
-
-                <cafe.adriel.androidaudioconverter.sample.MarkerView
-                    android:id="@+id/startmarker"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentTop="true"
-                    android:background="?selectableItemBackgroundBorderless"
-                    android:contentDescription="@string/start_marker"
-                    android:nextFocusDown="@+id/endmarker"
-                    android:src="@drawable/start_dragger"/>
-
-            </RelativeLayout>
-
+        </RelativeLayout>
+    </LinearLayout>
     <TextView
             android:id="@+id/info"
             android:layout_width="match_parent"

@@ -1,3 +1,4 @@
+/*
 package cafe.adriel.androidaudioconverter.sample;
 
 import android.Manifest;
@@ -39,7 +40,7 @@ public class ConvertFile extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.editor);
+        //setContentView(R.layout.editor);
         left = (TextView) findViewById(R.id.leftText);
         right = (TextView) findViewById(R.id.rightText);
         differenceText = (TextView) findViewById(R.id.difference);
@@ -166,3 +167,4 @@ public class ConvertFile extends AppCompatActivity {
         }
     }
 }
+*/

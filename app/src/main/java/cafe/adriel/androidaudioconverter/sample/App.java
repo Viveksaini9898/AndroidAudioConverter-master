@@ -17,7 +17,7 @@ public class App extends Application {
             @Override
             public void onFailure(Exception error) {
                 // FFmpeg is not supported by device
-                error.printStackTrace();
+                error.toString();
             }
         });
     }

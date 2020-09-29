@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <TextView
+        android:layout_marginTop="10dp"
+        android:paddingLeft="20dp"
+        android:text="Set as"
+        android:textSize="20dp"
+        android:textColor="@android:color/black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        />
+
+    <RadioGroup
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/radioGroup"
+        android:paddingLeft="20dp">
+
+        <RadioButton
+            android:id="@+id/ringtone"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="  Ringtone"
+            android:layout_marginTop="20dp"
+            android:checked="true"
+            android:textSize="20dp" />
+
+        <RadioButton
+            android:id="@+id/alarm"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="   Alarm"
+            android:layout_marginTop="20dp"
+            android:checked="false"
+            android:textSize="20dp" />
+
+        <RadioButton
+            android:id="@+id/notification"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="   Notification"
+            android:layout_marginTop="20dp"
+            android:checked="false"
+            android:textSize="20dp" />
+    </RadioGroup>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="20dp">
+        <TextView
+            android:id="@+id/cancel"
+            android:text="@string/cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="17dp"
+            android:layout_weight="4"
+            android:paddingLeft="150dp"
+            android:textColor="@android:color/holo_red_light" />
+
+        <TextView
+            android:id="@+id/set"
+            android:text="@string/set"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="17dp"
+            android:layout_weight="2"
+            android:textColor="@android:color/holo_red_light"
+            />
+    </LinearLayout>
+
+</LinearLayout>

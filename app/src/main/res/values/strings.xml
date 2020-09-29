@@ -2,10 +2,25 @@
     <string name="app_name">AndroidAudioConverter</string>
     <string name="cancel">CANCEL</string>
     <string name="convert">CONVERT</string>
+    <string name="end_marker">End Marker</string>
+    <string name="start_marker">Start_Marker</string>
+    <string name="set">SET</string>
+    <string name="already_exists">File name already exists</string>
     <array name="formats">
         <item>MP3</item>
         <item>WAV</item>
         <item>AAC</item>
         <item>M4A</item>
+    </array>
+    <array name="bitrates">
+        <item>32kb/s CBR</item>
+        <item>64kb/s CBR</item>
+        <item>128kb/s CBR</item>
+        <item>192kb/s CBR</item>
+        <item>256kb/s CBR</item>
+        <item>320kb/s CBR</item>
+        <item>130kb/s VBR(slow)</item>
+        <item>190kb/s VBR(slow)</item>
+        <item>245kb/s VBR(slow)</item>
     </array>
 </resources>

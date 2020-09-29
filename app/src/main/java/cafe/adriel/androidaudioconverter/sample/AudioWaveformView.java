@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.view.SurfaceView;
 import android.util.AttributeSet;
@@ -22,7 +23,6 @@ import android.widget.Toast;
             this(context, null, 0);
             //Toast.makeText(getContext(), "cons1", Toast.LENGTH_SHORT).show();
         }
-
         public AudioWaveformView(Context context, AttributeSet attrs) {
             this(context, attrs, 0);
         }
@@ -32,21 +32,20 @@ import android.widget.Toast;
             //Toast.makeText(getContext(), "cons3", Toast.LENGTH_SHORT).show();
             mPaint = new Paint();
             mPaint.setStyle(Paint.Style.STROKE);
-            mPaint.setColor(getResources().getColor(R.color.colorPrimaryDark));
+            mPaint.setColor(getResources().getColor(R.color.colorPrimary));
             mPaint.setStrokeWidth(0);
             mPaint.setAntiAlias(true);
         }
 
         public  synchronized void drawWaveform(int[] bytes) {
+
             Canvas canvas=getHolder().lockCanvas();
             if (canvas != null) {
 //			Toast.makeText(getContext(), "not null", Toast.LENGTH_SHORT).show();
-                canvas.drawColor(Color.BLACK);
-
+                //canvas.drawColor(Color.WHITE);
                 float width = getWidth();
                 float height = getHeight();
                 float centerY = height / 4;
-
                 float lastX = -1;
                 float lastY = -1;
 

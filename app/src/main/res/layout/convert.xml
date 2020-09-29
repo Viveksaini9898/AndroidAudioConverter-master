@@ -25,13 +25,15 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         >
-        <Button
-            android:id="@+id/minus"
-            android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/minusLeft"
+            android:layout_width="20dp"
             android:layout_height="30dp"
-            android:layout_toLeftOf="@+id/leftText"
             android:text="-"
             android:layout_marginLeft="10dp"
+            android:layout_alignParentLeft="true"
+            android:textColor="#ffffff"
+            android:gravity="center"
             android:background="@drawable/semi_circular_left"
             />
     <TextView
@@ -41,8 +43,19 @@
         android:text=""
         android:gravity="center"
         android:textColor="@android:color/white"
-        android:background="@android:color/holo_red_dark"
+        android:background="@color/holo_red"
+        android:layout_toRightOf="@+id/minusLeft"
         />
+        <TextView
+            android:id="@+id/plusLeft"
+            android:layout_width="20dp"
+            android:layout_height="30dp"
+            android:text="+"
+            android:textColor="#ffffff"
+            android:gravity="center"
+            android:layout_toRightOf="@+id/leftText"
+            android:background="@drawable/semi_circular_right"
+            />
         <TextView
             android:id="@+id/difference"
             android:text=""
@@ -52,64 +65,136 @@
             android:layout_centerInParent="true"
             />
         <TextView
+            android:id="@+id/minusRight"
+            android:layout_width="20dp"
+            android:layout_height="30dp"
+            android:text="-"
+            android:textColor="#ffffff"
+            android:gravity="center"
+            android:layout_toLeftOf="@+id/rightText"
+            android:background="@drawable/semi_circular_left"
+            />
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:id="@+id/rightText"
             android:gravity="center"
-            android:background="@android:color/holo_red_dark"
-            android:layout_alignParentRight="true"
+            android:background="@color/holo_red"
             android:textColor="@android:color/white"
             android:text=""
+            android:layout_toLeftOf="@+id/plusRight"
+            />
+        <TextView
+            android:id="@+id/plusRight"
+            android:layout_width="20dp"
+            android:layout_height="30dp"
+            android:text="+"
+            android:textColor="#ffffff"
+            android:gravity="center"
             android:layout_marginRight="10dp"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/semi_circular_right"
             />
     </RelativeLayout>
-    <cafe.adriel.androidaudioconverter.sample.AudioWaveformView
-        android:id="@+id/waveform"
-        android:layout_marginTop="50dp"
-        android:layout_width="fill_parent"
-        android:layout_below="@+id/timings"
-        android:layout_height="300dp" />
-
-   <!-- <com.semantive.waveformandroid.waveform.view.MarkerView android:id="@+id/startmarker"
-        android:nextFocusDown="@+id/endmarker"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/marker_left"
-        android:contentDescription="@string/start_marker" />
-
-    <com.semantive.waveformandroid.waveform.view.MarkerView android:id="@+id/endmarker"
-        android:nextFocusUp="@+id/startmarker"
-        android:nextFocusDown="@+id/info"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/marker_right"
-        android:contentDescription="@string/end_marker" />
-    <ImageView
-        android:id="@+id/spectrum"
-        android:layout_marginTop="50dp"
+    <RelativeLayout
+        android:id="@+id/cutterLayout"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"
-        android:layout_below="@+id/timings"
-        android:foreground="@mipmap/music"
-        />-->
-    <org.florescu.android.rangeseekbar.RangeSeekBar
-        android:layout_below="@+id/waveform"
-        android:layout_width="match_parent"
-        android:id="@+id/rangeseekbar"
         android:layout_height="wrap_content"
-        android:paddingRight="50dp"
-        app:valuesAboveThumbs="false"
-        android:paddingLeft="50dp"/>
-    <ImageView
-        android:id="@+id/play"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_below="@id/timings"
+        >
+      <cafe.adriel.androidaudioconverter.sample.MarkerView
+          android:id="@+id/leftThumb"
+          android:layout_width="wrap_content"
+          android:layout_height="200dp"
+          android:background="@drawable/left_thumb"
+          android:elevation="6dp"
+          android:layout_alignParentLeft="true"
+          android:layout_marginLeft="5dp"
+          android:layout_marginTop="30dp"
+          />
+      <View
+          android:id="@+id/viewLeft"
+          android:layout_width="1dp"
+          android:layout_height="200dp"
+          android:background="#80000000"
+          android:layout_alignParentLeft="true"
+          android:elevation="5dp"
+          android:layout_marginLeft="20dp"
+          android:layout_marginTop="30dp"
+          />
+       <!-- <View
+            android:id="@+id/viewLeft"
+            android:layout_width="1dp"
+            android:layout_height="200dp"
+            android:background="#80000000"
+            android:layout_alignParentLeft="true"
+            android:elevation="5dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="30dp"
+            />-->
+      <SeekBar
+          android:id="@+id/sbChangeSeekPosition"
+          android:layout_width="match_parent"
+          android:layout_height="220dp"
+          android:progressDrawable="@null"
+          android:background="@null"
+          android:thumb="@drawable/music_thumb"
+          android:elevation="5dp"
+          android:paddingLeft="20dp"
+          android:paddingRight="20dp"
+          android:layout_marginTop="30dp"
+          />
+      <cafe.adriel.androidaudioconverter.sample.AudioWaveformView
+          android:id="@+id/waveform"
+          android:layout_width="match_parent"
+          android:layout_height="200dp"
+          android:elevation="2dp"
+          android:layout_marginLeft="20dp"
+          android:layout_marginTop="30dp"
+          android:layout_marginRight="20dp"
+          />
+      <cafe.adriel.androidaudioconverter.sample.MarkerView
+          android:id="@+id/rightThumb"
+          android:layout_width="wrap_content"
+          android:layout_height="200dp"
+          android:background="@drawable/right_thumb"
+          android:layout_alignParentRight="true"
+          android:elevation="6dp"
+          android:layout_marginTop="30dp"
+          android:layout_marginRight="5dp"
+          />
+      <View
+          android:id="@+id/viewRight"
+          android:layout_width="1dp"
+          android:layout_height="200dp"
+          android:background="#80000000"
+          android:layout_alignParentRight="true"
+          android:elevation="5dp"
+          android:layout_marginTop="30dp"
+          android:layout_marginRight="20dp"
+          />
+    </RelativeLayout>
+    <Button
+        android:id="@+id/play_from_left"
+        android:layout_width="55dp"
+        android:layout_height="40dp"
         android:layout_marginTop="30dp"
-        android:layout_alignParentRight="true"
-        android:src="@mipmap/ic_launcher_play"
+        android:src="@drawable/play_from_left"
         android:layout_marginRight="30dp"
-        android:layout_below="@+id/rangeseekbar"
+        android:layout_toLeftOf="@+id/play"
+        android:layout_below="@+id/cutterLayout"
+        android:background="@drawable/stop_background"
         />
-</RelativeLayout>
+        <Button
+          android:id="@+id/play"
+          android:layout_width="55dp"
+          android:layout_height="40dp"
+          android:layout_marginTop="30dp"
+          android:layout_alignParentRight="true"
+          android:src="@drawable/play"
+            android:scaleType="centerInside"
+            android:layout_marginRight="30dp"
+            android:layout_below="@+id/cutterLayout"
+            android:background="@drawable/stop_background"
+          />
+  </RelativeLayout>

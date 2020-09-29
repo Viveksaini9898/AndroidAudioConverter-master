@@ -103,6 +103,8 @@ public class AndroidAudioConverter {
             return;
         }
         outputFile=getConvertedFile(outputFile,format);
+        if(FFmpeg.getInstance(this.context).isFFmpegCommandRunning())
+            killAllreadyRunningProcess(context);
         final String[] cmd_to_trim = new String[]{"-i" ,audioFile.getPath(), "-ss",durationLeft, "-to" ,durationRight ,"-c" ,"copy", "-f","wav",outputFile.getPath()};
         try {
             FFmpeg.getInstance(context).execute(cmd_to_trim, new FFmpegExecuteResponseHandler() {
@@ -138,5 +140,10 @@ public class AndroidAudioConverter {
         String[] f = originalFile.getAbsolutePath().split("\\.");
         String filePath =originalFile.getAbsolutePath().replace(f[f.length - 1],format.getFormat());
         return new File(filePath);
+    }
+    private void killAllreadyRunningProcess(Context context){
+        FFmpeg ffmpeg=FFmpeg.getInstance(context);
+        if(ffmpeg.isFFmpegCommandRunning())
+            ffmpeg.killRunningProcesses();
     }
 }

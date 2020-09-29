@@ -330,7 +330,7 @@ public class ConvertFile extends AppCompatActivity implements MarkerView.MarkerL
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                     int percent = mEndMarker.getLeft();
-                   int minPercent = percent * 100 / 645;
+                   int minPercent = percent * 100 / 648;
                     int currentProgress = seekBar.getProgress();
                     int progressPercent = (int) (currentProgress * 100 / duration);
                     if(progressPercent>=minPercent)
@@ -339,7 +339,7 @@ public class ConvertFile extends AppCompatActivity implements MarkerView.MarkerL
                         seekBar.setAlpha(0f);
                     }
                  percent = mStartMarker.getLeft();
-                 minPercent = percent * 100 / 645;
+                 minPercent = percent * 100 / 648;
                  currentProgress = seekBar.getProgress();
                  progressPercent = (int) (currentProgress * 100 / duration);
                 if(progressPercent<minPercent)
@@ -615,12 +615,12 @@ public class ConvertFile extends AppCompatActivity implements MarkerView.MarkerL
             mStartMarker.setLayoutParams(params);
             RelativeLayout.LayoutParams param2=(RelativeLayout.LayoutParams) leftView.getLayoutParams();
             int lagging2=(mStartMarker.getRight()-mStartMarker.getLeft())/2;
-            int leftMargin2=mStartMarker.getLeft()+lagging2;
+            int leftMargin2=mStartMarker.getLeft();
             if(leftMargin2>700)
                 leftX=trap(leftMargin2);
             else
                 leftX=leftMargin2;
-            param2.width=mStartPos;
+            param2.width=leftX;
             param2.height= audioWaveformView.getHeight();
         }
         if(lastUpdatedMarker==mEndMarker)

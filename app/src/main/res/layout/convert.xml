@@ -174,7 +174,7 @@
           android:layout_marginRight="20dp"
           />
     </RelativeLayout>
-    <Button
+    <ImageView
         android:id="@+id/play_from_left"
         android:layout_width="55dp"
         android:layout_height="40dp"
@@ -185,7 +185,7 @@
         android:layout_below="@+id/cutterLayout"
         android:background="@drawable/stop_background"
         />
-        <Button
+        <ImageView
           android:id="@+id/play"
           android:layout_width="55dp"
           android:layout_height="40dp"

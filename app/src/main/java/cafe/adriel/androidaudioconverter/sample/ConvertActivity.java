@@ -1,9 +1,8 @@
 package cafe.adriel.androidaudioconverter.sample;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
-import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.media.RingtoneManager;
@@ -11,7 +10,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import androidx.annotation.Nullable;
@@ -23,8 +21,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.webkit.MimeTypeMap;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,19 +30,27 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.IOException;
 
-import static android.provider.Telephony.Mms.Addr.CONTACT_ID;
+import cafe.adriel.androidaudioconverter.AndroidAudioConverter;
+import cafe.adriel.androidaudioconverter.callback.IConvertCallback;
+import cafe.adriel.androidaudioconverter.model.AudioFormat;
 
 public class ConvertActivity extends AppCompatActivity implements Runnable {
 
-    TextView convertfilename, textview;
+    TextView convertfilename, textview,txBitrate,txSize,progressPercent;
     MediaPlayer mediaPlayer;
     SeekBar seekBar;
+    ProgressBar progressIndicator;
     boolean wasPlaying = false;
     ImageView play_pause_btn, share, openwith, setas;
-    String duration,songname;
-    File convertedFilepath;
+    String duration;
+    File outputFile,inputFile;
+    AudioFormat format;
+    String durationLeft,durationRight;
+    int difference;
+    float volume;
     int position, currentPosition;
-    String absolute_path;
+    String bitrate;
+    View settings,playerDisplay;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,31 +58,39 @@ public class ConvertActivity extends AppCompatActivity implements Runnable {
         convertfilename = findViewById(R.id.convertfilename);
         seekBar = findViewById(R.id.seekbar);
         play_pause_btn = findViewById(R.id.button);
+        progressPercent=findViewById(R.id.progressPercent);
         textview = findViewById(R.id.textView);
         share = findViewById(R.id.share);
+        progressIndicator=findViewById(R.id.progressIndicator);
+        settings=findViewById(R.id.settings);
+        playerDisplay=findViewById(R.id.playerDisplay);
         openwith = findViewById(R.id.openwith);
         setas = findViewById(R.id.setas);
+        txSize=findViewById(R.id.size);
+        txBitrate=findViewById(R.id.bitrate);
         Bundle extras = getIntent().getExtras();
-        songname=extras.get("converted filename").toString();
-        convertfilename.setText(songname);
-        convertedFilepath = new File(Environment.getExternalStorageDirectory(), extras.get("converted filename").toString());
-         absolute_path=Environment.getExternalStorageDirectory()+extras.get("converted filename").toString();
-        mediaPlayer = new MediaPlayer();
-        try {
-            mediaPlayer.setDataSource(String.valueOf(convertedFilepath));
-            mediaPlayer.prepare();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        duration = Time_Conversion_in_minsec(mediaPlayer.getDuration());
-        textview.setText(String.format("%02d:%02d", 00, 00) + "/" + duration);
-        seekBar.setMax(mediaPlayer.getDuration());
+        bitrate=extras.get("bitrate").toString();
+        inputFile=(File)extras.get("inputfile");
+        outputFile =(File)extras.get("outputfile");
+        format=(AudioFormat) extras.get("format");
+        volume=(float) extras.get("volume");
+        durationLeft=extras.getString("durationLeft");
+        difference=(int)extras.get("difference");
+        durationRight=extras.getString("durationRight");
+        convertfilename.setText(outputFile.getName());
+        txBitrate.setText(" | "+bitrate+"b/s");
+        progressIndicator.setMax(difference);
+        convertAudio(format,outputFile,bitrate,volume);
+        setListeners();
+    }
+
+    private void setListeners() {
         share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
-                Uri screenshotUri = Uri.parse(convertedFilepath.toString());
+                Uri screenshotUri = Uri.parse(outputFile.toString());
                 sendIntent.setType("audio/*");
                 sendIntent.putExtra(Intent.EXTRA_STREAM, screenshotUri);
                 Intent.createChooser(sendIntent, "Share via");
@@ -86,7 +100,7 @@ public class ConvertActivity extends AppCompatActivity implements Runnable {
         openwith.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Uri uri = Uri.parse(convertedFilepath.toString());
+                Uri uri = Uri.parse(outputFile.toString());
                 Log.d("uri",uri.toString());
                 Intent it = new Intent();
                 it.setAction(android.content.Intent.ACTION_VIEW);
@@ -128,6 +142,7 @@ public class ConvertActivity extends AppCompatActivity implements Runnable {
             }
         });
     }
+
     public void playSong() {
         if (mediaPlayer != null && mediaPlayer.isPlaying()) {
             position = mediaPlayer.getCurrentPosition();
@@ -143,7 +158,68 @@ public class ConvertActivity extends AppCompatActivity implements Runnable {
         }
         wasPlaying = false;
     }
+    public void convertAudio(AudioFormat format, File wavFile,  String bitrateSelected,  float volume) {
+        String pathDebug=wavFile.getPath();
+        Log.d("filepath",pathDebug);
+        Toast.makeText(getApplicationContext(), inputFile.getPath(), Toast.LENGTH_LONG).show();
+        IConvertCallback callback = new IConvertCallback() {
+            @Override
+            public void onSuccess(File convertedFile) {
+                refreshGallery(convertedFile.getPath(),ConvertActivity.this);
+                Toast.makeText(ConvertActivity.this, "SUCCESS: " + convertedFile.getPath(), Toast.LENGTH_LONG).show();
+               outputFile=convertedFile;
+                long size_long= outputFile.length();
+                txSize.setVisibility(View.VISIBLE);
+                playerDisplay.setVisibility(View.VISIBLE);
+                settings.setVisibility(View.VISIBLE);
+                progressIndicator.setVisibility(View.GONE);
+                txSize.setText(format(size_long,1));
+                //absolute_path=Environment.getExternalStorageDirectory()+extras.get("converted filename").toString();
+                mediaPlayer = new MediaPlayer();
+                try {
+                    mediaPlayer.setDataSource(outputFile.getPath());
+                    mediaPlayer.prepare();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                seekBar.setMax(mediaPlayer.getDuration());
+                duration = Time_Conversion_in_minsec(mediaPlayer.getDuration());
+                textview.setText(String.format("%02d:%02d", 00, 00) + "/" + duration);
+            }
 
+            @Override
+            public void onFailure(Exception error) {
+                Toast.makeText(ConvertActivity.this,error.toString(), Toast.LENGTH_LONG).show();
+                Log.d("checkandresolve", error.toString());
+            }
+        };
+        Log.d("Filename", inputFile.getPath());
+        if (inputFile != null) {
+            AndroidAudioConverter.with(ConvertActivity.this,progressIndicator,progressPercent)
+                    .setInputFile(inputFile)
+                    .setOutputFile(wavFile)
+                    .setdurations(difference)
+                    .setFormat(format)
+                    .setCallback(callback)
+                    .setDuration(durationLeft, durationRight)
+                    .setBitrate(bitrateSelected)
+                    .setVolume(String.valueOf(volume))
+                    .convert();
+        } else {
+            Toast.makeText(ConvertActivity.this, "File not passed", Toast.LENGTH_LONG).show();
+        }
+    }
+    void refreshGallery(String path, Context context) {
+        File file = new File(path);
+        try {
+            Intent mediaScanIntent =new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+            Uri contentUri = Uri.fromFile(file);
+            mediaScanIntent.setData(contentUri);
+            context.sendBroadcast(mediaScanIntent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     @Override
     protected void onPause() {
         mediaPlayer.pause();
@@ -194,7 +270,7 @@ public class ConvertActivity extends AppCompatActivity implements Runnable {
         item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-                Intent i = new Intent(ConvertActivity.this, MainActivity.class);
+                Intent i = new Intent(ConvertActivity.this, SelectorActivity.class);
                 startActivity(i);
                 return true;
             }
@@ -206,6 +282,7 @@ public class ConvertActivity extends AppCompatActivity implements Runnable {
         super.onDestroy();
         mediaPlayer.pause();
     }
+
     private String Time_Conversion_in_minsec(int milisec){
         int x = (int) Math.ceil(milisec / 1000f);
         int min = (x % 3600) / 60;
@@ -215,21 +292,21 @@ public class ConvertActivity extends AppCompatActivity implements Runnable {
 
     public void setTone(int i) {
         ContentValues values = new ContentValues(i);
-        values.put(MediaStore.MediaColumns.DATA, convertedFilepath.getAbsolutePath());
-        values.put(MediaStore.MediaColumns.TITLE, songname);
+        values.put(MediaStore.MediaColumns.DATA, outputFile.getAbsolutePath());
+        values.put(MediaStore.MediaColumns.TITLE, outputFile.getName());
         values.put(MediaStore.MediaColumns.MIME_TYPE, "audio/*");
-        values.put(MediaStore.Audio.Media.SIZE,convertedFilepath.length());
+        values.put(MediaStore.Audio.Media.SIZE, outputFile.length());
         if(i==1)
         values.put(MediaStore.Audio.Media.IS_RINGTONE, true);
         else if(i==2)
         values.put(MediaStore.Audio.Media.IS_NOTIFICATION, true);
         else if(i==4)
         values.put(MediaStore.Audio.Media.IS_ALARM, true);
-        Uri uri = MediaStore.Audio.Media.getContentUriForPath(convertedFilepath.getAbsolutePath());
+        Uri uri = MediaStore.Audio.Media.getContentUriForPath(outputFile.getAbsolutePath());
         getContentResolver().delete(
                 uri,
                 MediaStore.MediaColumns.DATA + "=\""
-                        + convertedFilepath.getAbsolutePath() + "\"", null);
+                        + outputFile.getAbsolutePath() + "\"", null);
         Uri newUri = this.getContentResolver().insert(uri, values);
 /*
         RingtoneManager ringtoneManager=new RingtoneManager(this);
@@ -244,7 +321,17 @@ public class ConvertActivity extends AppCompatActivity implements Runnable {
         }
         this.getContentResolver().insert(uri, values);
     }
-
+    public static String format(double bytes, int digits) {
+        String[] dictionary = { "bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
+        int index = 0;
+        for (index = 0; index < dictionary.length; index++) {
+            if (bytes < 1024) {
+                break;
+            }
+            bytes = bytes / 1024;
+        }
+        return String.format("%." + digits + "f", bytes) + " " + dictionary[index];
+    }
 }
 
 

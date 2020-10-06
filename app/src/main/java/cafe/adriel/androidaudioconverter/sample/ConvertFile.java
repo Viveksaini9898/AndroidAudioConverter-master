@@ -1,10 +1,13 @@
 package cafe.adriel.androidaudioconverter.sample;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.drawable.ColorDrawable;
 import android.icu.util.ICUUncheckedIOException;
+import android.media.MediaExtractor;
+import android.media.MediaFormat;
 import android.media.MediaPlayer;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
@@ -13,6 +16,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -25,6 +29,10 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.github.hiteshsondhi88.libffmpeg.FFmpeg;
+import com.github.hiteshsondhi88.libffmpeg.FFmpegExecuteResponseHandler;
+
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -38,7 +46,8 @@ import cafe.adriel.androidaudioconverter.model.AudioFormat;
 import es.dmoral.toasty.Toasty;
 
 public class ConvertFile extends AppCompatActivity implements MarkerView.MarkerListener {
-    int min, max, difference;
+    int min, max;
+    int difference;
     TextView left, right, differenceText,minusLeft,plusLeft,minusRight,plusRight;
     long duration;
     ImageView playImage,playFromLeft;
@@ -63,6 +72,8 @@ public class ConvertFile extends AppCompatActivity implements MarkerView.MarkerL
     View leftView,rightView;
     private boolean wasPlaying=false;
     private boolean trapped=false;
+    private boolean flag;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -115,12 +126,10 @@ public class ConvertFile extends AppCompatActivity implements MarkerView.MarkerL
             getSupportActionBar().setBackgroundDrawable(
                     new ColorDrawable(getResources().getColor(R.color.colorPrimaryDark)));
         }
-
-        Util.requestPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
-        Util.requestPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
     }
-    public void setListeners()
-    {
+
+
+    public void setListeners() {
         minusLeft.setOnClickListener(new View.OnClickListener() {
                                          @Override
                                          public void onClick(View view) {
@@ -339,12 +348,13 @@ public class ConvertFile extends AppCompatActivity implements MarkerView.MarkerL
                         seekBar.setAlpha(0f);
                     }
                  percent = mStartMarker.getLeft();
-                 minPercent = percent * 100 / 648;
+                 minPercent = percent * 100 / 625;
                  currentProgress = seekBar.getProgress();
                  progressPercent = (int) (currentProgress * 100 / duration);
                 if(progressPercent<minPercent)
                 {
                     seekBar.setClickable(false);
+                    seekBar.setEnabled(false);
                     seekBar.setAlpha(0f);
                 }
             }
@@ -406,6 +416,7 @@ public class ConvertFile extends AppCompatActivity implements MarkerView.MarkerL
         if(!sbChangeSeekPosition.isClickable())
         {
             sbChangeSeekPosition.setClickable(true);
+            sbChangeSeekPosition.setEnabled(true);
             sbChangeSeekPosition.setAlpha(1f);
         }
     }
@@ -473,53 +484,6 @@ public class ConvertFile extends AppCompatActivity implements MarkerView.MarkerL
         });
         return super.onCreateOptionsMenu(menu);
     }
-    public void convertAudio(AudioFormat format,File wavFile) {
-            String pathDebug=wavFile.getPath();
-            Log.d("filepath",pathDebug);
-            Toast.makeText(getApplicationContext(), selectedFile.getPath(), Toast.LENGTH_LONG).show();
-            IConvertCallback callback = new IConvertCallback() {
-                @Override
-                public void onSuccess(File convertedFile) {
-                    Toast.makeText(ConvertFile.this, "SUCCESS: " + convertedFile.getPath(), Toast.LENGTH_LONG).show();
-                    MediaScannerConnection.scanFile(
-                            getApplicationContext(),
-                            new String[]{ convertedFile.getPath() },
-                           null,
-                            new MediaScannerConnection.MediaScannerConnectionClient()
-                            {
-                                public void onMediaScannerConnected()
-                                {
-                                }
-                                public void onScanCompleted(String path, Uri uri)
-                                {
-                                }
-                            });
-                    Intent intent=new Intent(ConvertFile.this,ConvertActivity.class);
-                    intent.putExtra("converted filename",convertedFile.getName());
-                    intent.putExtra("converted file",convertedFile);
-                    startActivity(intent);
-                }
-
-                @Override
-                public void onFailure(Exception error) {
-                    Toast.makeText(ConvertFile.this,"Note : you have not selected any portion", Toast.LENGTH_LONG).show();
-                    Log.d("Error", error.getMessage());
-                }
-            };
-            Toast.makeText(ConvertFile.this, "Converting audio file...", Toast.LENGTH_SHORT).show();
-            Log.d("Filename", selectedFile.getPath());
-            if (selectedFile != null) {
-                AndroidAudioConverter.with(ConvertFile.this)
-                        .setInputFile(selectedFile)
-                        .setOutputFile(wavFile)
-                        .setFormat(format)
-                        .setCallback(callback)
-                        .setDuration(duration_left, durationRight)
-                        .convert();
-            } else {
-                Toast.makeText(ConvertFile.this, "File not passed", Toast.LENGTH_LONG).show();
-            }
-        }
     protected void onResume() {
         super.onResume();
         if(!AudioWaveformView.isWaveDrawn){
@@ -557,9 +521,11 @@ public class ConvertFile extends AppCompatActivity implements MarkerView.MarkerL
     }
     @Override
     public void markerTouchMove(MarkerView marker, float posX) {
+        flag=true;
         if (marker == mStartMarker) {
             if(mediaPlayer.isPlaying()) {
                 sbChangeSeekPosition.setClickable(false);
+                sbChangeSeekPosition.setEnabled(true);
                 sbChangeSeekPosition.setAlpha(1f);
             }
             lastUpdatedMarker=mStartMarker;
@@ -615,12 +581,12 @@ public class ConvertFile extends AppCompatActivity implements MarkerView.MarkerL
             mStartMarker.setLayoutParams(params);
             RelativeLayout.LayoutParams param2=(RelativeLayout.LayoutParams) leftView.getLayoutParams();
             int lagging2=(mStartMarker.getRight()-mStartMarker.getLeft())/2;
-            int leftMargin2=mStartMarker.getLeft();
+            int leftMargin2=mStartPos;
             if(leftMargin2>700)
                 leftX=trap(leftMargin2);
             else
                 leftX=leftMargin2;
-            param2.width=leftX;
+            param2.width=mStartPos;
             param2.height= audioWaveformView.getHeight();
         }
         if(lastUpdatedMarker==mEndMarker)
@@ -782,6 +748,27 @@ public class ConvertFile extends AppCompatActivity implements MarkerView.MarkerL
                 audioWaveformView.drawWaveform(bytes);
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        if(flag) {
+            new AlertDialog.Builder(this)
+                    .setTitle("Without Saving")
+                    .setMessage("Are you sure you want to exit?")
+                    .setNegativeButton("EXIT", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            finish();// Continue with delete operation
+                        }
+                    })
+
+                    // A null listener allows the button to dismiss the dialog and take no further action.
+                    .setPositiveButton("CANCEL", null)
+                    .show();
+        }
+        else
+        super.onBackPressed();
+    }
+
     @Override
     public void onDestroy() {
         if (runnable != null&&mHandler!=null)

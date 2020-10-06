@@ -1,75 +1,49 @@
 package cafe.adriel.androidaudioconverter.sample;
 
 import android.Manifest;
-import android.content.ContentUris;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.ImageDecoder;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Handler;
+import android.os.Bundle;
 import android.provider.MediaStore;
-
-import android.app.SearchManager;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.SearchView.OnQueryTextListener;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.MenuItemCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.Toast;
-
-import java.io.BufferedInputStream;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.AbstractQueue;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import cafe.adriel.androidaudioconverter.sample.asynctask.DataFetcherAsyncTask;
 import cafe.adriel.androidaudioconverter.sample.listener.DataFetcherListener;
-import es.dmoral.toasty.Toasty;
 
-public class MainActivity extends AppCompatActivity implements DataFetcherListener {
+public class AudioMergerActivity extends AppCompatActivity implements DataFetcherListener {
     RecyclerView recyclerView;
-    private SongListAdapter songListAdapter;
+    private AudioMergerAdapter songListAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_audio_merger);
         // Checking if permission is not granted
-        if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED||
-                ContextCompat.checkSelfPermission(MainActivity.this,Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+        if (ContextCompat.checkSelfPermission(AudioMergerActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED||
+                ContextCompat.checkSelfPermission(AudioMergerActivity.this,Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
             ActivityCompat
                     .requestPermissions(
-                            MainActivity.this,
+                            AudioMergerActivity.this,
                             new String[] {Manifest.permission.READ_EXTERNAL_STORAGE,
                                            Manifest.permission.WRITE_EXTERNAL_STORAGE },
                             1);
@@ -104,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements DataFetcherListen
         inflator.inflate(R.menu.menu_source,menu);
         MenuItem item=menu.getItem(0);
         final SearchView searchView = (SearchView) item.getActionView();
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        searchView.setOnQueryTextListener(new OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                     songListAdapter.getFilter().filter(query);
@@ -134,12 +108,12 @@ public class MainActivity extends AppCompatActivity implements DataFetcherListen
         String permission=Manifest.permission.READ_EXTERNAL_STORAGE;
         // Checking if permission is not granted
         if (ContextCompat.checkSelfPermission(
-                MainActivity.this,
+                AudioMergerActivity.this,
                 permission)
                 == PackageManager.PERMISSION_DENIED) {
             ActivityCompat
                     .requestPermissions(
-                            MainActivity.this,
+                            AudioMergerActivity.this,
                             new String[] { permission },
                             1);
         }
@@ -171,7 +145,7 @@ public class MainActivity extends AppCompatActivity implements DataFetcherListen
         if (songListAdapter == null){
             recyclerView=findViewById(R.id.list_of_audios);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
-            songListAdapter=new SongListAdapter(this,itemsModelList);
+            songListAdapter=new AudioMergerAdapter(this,itemsModelList);
             recyclerView.setAdapter(songListAdapter);
 
         }else{

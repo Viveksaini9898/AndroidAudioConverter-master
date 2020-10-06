@@ -8,7 +8,6 @@
     <string name="already_exists">File name already exists</string>
     <array name="formats">
         <item>MP3</item>
-        <item>WAV</item>
         <item>AAC</item>
         <item>M4A</item>
     </array>
@@ -23,4 +22,10 @@
         <item>190kb/s VBR(slow)</item>
         <item>245kb/s VBR(slow)</item>
     </array>
+    <string name="title_activity_output_folders">OutputFoldersActivity</string>
+    <string name="tab_text_1">VIDEO TO AUDIO</string>
+    <string name="tab_text_2">VIDEO CUTTER</string>
+    <string name="tab_text_3">AUDIO CUTTER</string>
+    <string name="tab_text_4">AUDIO MERGER</string>
+    <string name="tab_text_5">RINGTONE CUTTER</string>
 </resources>

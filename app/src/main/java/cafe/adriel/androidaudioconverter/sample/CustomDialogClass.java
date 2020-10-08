@@ -26,9 +26,8 @@ public class CustomDialogClass extends Dialog implements
         android.view.View.OnClickListener {
     AudioFormat format;
     public ConvertFile c;
-    public Button convert,cancel;
     public EditText filename;
-    public TextView tv_exist;
+    public TextView tvexist,convert,cancel;
     Spinner formatSpinner,bitrate;
     String bitrateSelected;
     public CustomDialogClass(ConvertFile a) {
@@ -45,7 +44,7 @@ public class CustomDialogClass extends Dialog implements
         int length=nameHint.length();
         filename.setText("Audio_Converter_"+nameHint.substring(0,length-4));
         formatSpinner=findViewById(R.id.format);
-        tv_exist=findViewById(R.id.tx_exist);
+        tvexist=findViewById(R.id.txexist);
        bitrate =findViewById(R.id.bitrate);
         MediaExtractor mex = new MediaExtractor();
         try {
@@ -127,7 +126,7 @@ public class CustomDialogClass extends Dialog implements
             @Override
             public void onTextChanged(CharSequence s, int start,
                                       int before, int count) {
-                tv_exist.setVisibility(View.GONE);
+                tvexist.setVisibility(View.GONE);
             }
         });
         formatSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -167,7 +166,7 @@ public class CustomDialogClass extends Dialog implements
                 File wavFile=new File(Environment.getExternalStorageDirectory(),filename.getText().toString()+".mp3");
                 if(wavFile.exists())
                 {
-                   tv_exist.setVisibility(View.VISIBLE);
+                   tvexist.setVisibility(View.VISIBLE);
                 }
                 else {
                     c.convertAudio(format, wavFile);

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AndroidAudioConverter</string>
+    <string name="app_name">Mp3 Converter</string>
     <string name="cancel">CANCEL</string>
     <string name="convert">CONVERT</string>
     <string name="end_marker">End Marker</string>

@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/home"
-        android:icon="@drawable/home_foreground"
+        android:icon="@drawable/home_white_24dp"
         android:title="home"
         app:showAsAction="always"
         />

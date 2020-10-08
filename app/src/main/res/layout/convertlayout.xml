@@ -1,55 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-<LinearLayout
+<RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:background="#ffffff">
-
+    android:id="@+id/relative"
+    android:layout_marginTop="10dp"
+    >
 
     <ImageView
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:src="@drawable/song"
-        android:paddingStart="20dp"
-        android:paddingTop="20dp"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=""
-        android:textSize="15dp"
-        android:paddingTop="25dp"
-        android:paddingStart="20dp"
-        android:id="@+id/convertfilename"
-        />
-</LinearLayout>
-    <LinearLayout
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="10dp"
+        android:id="@+id/ImageView"
+        android:src="@drawable/audio_icon"
+       />
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="50dp"
+        android:layout_toEndOf="@+id/ImageView"
+        android:paddingStart="10dp"
+        android:layout_marginEnd="10dp"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:lines="1"
+            android:textSize="14dp"
+            android:textColor="@color/colorBlack"
+            android:id="@+id/convertfilename"
+            />
+
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:scaleType="centerInside"
+            android:layout_marginStart="10dp"
+            android:src="@drawable/done_white_24dp"
+            android:background="@drawable/circle_background"
+            android:layout_toEndOf="@id/convertfilename"/>
+    </RelativeLayout>
+</RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:gravity="center"
+        android:id="@+id/Rv"
+        android:layout_below="@id/relative"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="10dp"
         android:orientation="horizontal"
-        android:background="#ffffff">
+       >
 
         <ImageView
             android:id="@+id/button"
-            android:layout_width="48dp"
-            android:scaleType="centerInside"
-            android:layout_weight="0"
-            android:layout_height="48dp"
-            android:src="@android:drawable/ic_media_play"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/play_arrow_black_24dp"
             />
         <SeekBar
             android:id="@+id/seekbar"
-            android:layout_width="220dp"
+            android:layout_width="240dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="0"
+            android:layout_toEndOf="@+id/button"
+
            />
 
         <TextView
@@ -58,30 +81,35 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:textStyle="bold"
-            android:layout_weight="1"
+            android:layout_toEndOf="@id/seekbar"
             android:textSize="11dp"
             android:text="" />
 
 
-    </LinearLayout>
-    <LinearLayout
+    </RelativeLayout>
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:background="#ffffff">
+        android:layout_below="@+id/Rv"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="20dp"
+      >
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_weight="0">
+            android:id="@+id/lImage"
+           >
 
         <ImageView
             android:layout_width="55dp"
             android:layout_height="55dp"
             android:id="@+id/openwith"
             android:layout_gravity="center"
-            android:src="@drawable/openwith"
+            android:src="@drawable/open_with_black_24dp"
             android:layout_weight="0"/>
 
             <TextView
@@ -96,9 +124,12 @@
 
         <LinearLayout
             android:layout_width="wrap_content"
+            android:id="@+id/lImage1"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_weight="2">
+            android:layout_toRightOf="@+id/lImage"
+            android:layout_marginStart="30dp"
+           >
         <ImageView
             android:layout_width="55dp"
             android:layout_height="55dp"
@@ -119,7 +150,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_weight="4">
+            android:layout_toRightOf="@+id/lImage1"
+            android:layout_marginStart="30dp"
+           >
         <ImageView
             android:layout_width="55dp"
             android:layout_height="55dp"
@@ -138,6 +171,6 @@
 
 
 
-    </LinearLayout>
+    </RelativeLayout>
 
-</LinearLayout>
+</RelativeLayout>

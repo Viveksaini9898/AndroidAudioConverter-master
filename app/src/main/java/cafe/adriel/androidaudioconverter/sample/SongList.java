@@ -35,7 +35,6 @@ public class SongList extends BaseAdapter implements Filterable
     private ArrayList<ItemsModel> itemsModelListFiltered;
     MediaPlayer mediaPlayer;
     int lastPosition=-1;
-    private boolean sameposition=false;
     public  SongList(AppCompatActivity context,ArrayList<ItemsModel> itemModel) {
         super();
         this.context = context;

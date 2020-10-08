@@ -133,9 +133,9 @@ public class ConvertActivity extends AppCompatActivity implements Runnable {
             position = mediaPlayer.getCurrentPosition();
             mediaPlayer.pause();
             wasPlaying = true;
-            play_pause_btn.setImageResource(android.R.drawable.ic_media_play);
+            play_pause_btn.setImageResource(R.drawable.play_arrow_black_24dp);
         } else if (!wasPlaying) {
-            play_pause_btn.setImageResource(android.R.drawable.ic_media_pause);
+            play_pause_btn.setImageResource(R.drawable.pause_black_24dp);
             mediaPlayer.setVolume(0.5f, 0.5f);
             mediaPlayer.setLooping(false);
             mediaPlayer.start();
@@ -164,7 +164,7 @@ public class ConvertActivity extends AppCompatActivity implements Runnable {
             }
             seekBar.setProgress(currentPosition);
         }
-        play_pause_btn.setImageResource(android.R.drawable.ic_media_play);
+        play_pause_btn.setImageResource(R.drawable.play_arrow_black_24dp);
     }
     private boolean checkSystemWritePermission() {
         boolean retVal=false;

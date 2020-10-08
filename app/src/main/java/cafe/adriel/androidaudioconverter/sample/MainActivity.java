@@ -25,6 +25,7 @@ import android.widget.SearchView;
 import android.widget.SearchView.OnQueryTextListener;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,7 +36,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -61,29 +64,17 @@ public class MainActivity extends AppCompatActivity {
     Uri imageUri;
     SongList songList;
     ArrayList<ItemsModel> itemList = new ArrayList<>();
+    private Toolbar mActionBarToolbar;
+    private ImageView back;
+    private SearchView search;
+    private TextView audiofile;
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        String permission=Manifest.permission.READ_EXTERNAL_STORAGE;
-            // Checking if permission is not granted
-            if (ContextCompat.checkSelfPermission(
-                    MainActivity.this,
-                    permission)
-                    == PackageManager.PERMISSION_DENIED) {
-                ActivityCompat
-                        .requestPermissions(
-                                MainActivity.this,
-                                new String[] { permission },
-                                1);
-            }
-            else {
-                Toast
-                        .makeText(MainActivity.this,
-                                "Permission already granted",
-                                Toast.LENGTH_SHORT)
-                        .show();
-            }
+       // audiofile=findViewById(R.id.tvAudiofile);
         String[] projection = new String[]{
                 MediaStore.Audio.Media._ID,
                 MediaStore.Audio.Media.ALBUM,
@@ -114,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
             int sizeColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.SIZE);
             int album = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM);
             int albumId = cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID);
+
             while (cursor.moveToNext()) {
                 // Get values of columns for a given video.
                 long id = cursor.getLong(idColumn);
@@ -125,6 +117,7 @@ public class MainActivity extends AppCompatActivity {
                 imageUri=ContentUris.withAppendedId(albumArtUri, cursor.getLong(albumId));
                 audioList.add(contentUri);
                 names.add(name);
+
                 song_duration.add(String.valueOf(duration));
                 ItemsModel itemsModel=new ItemsModel(name,loadFromUri(imageUri),contentUri,String.valueOf(duration),size);
                 itemList.add(itemsModel);
@@ -134,6 +127,42 @@ public class MainActivity extends AppCompatActivity {
         listView =findViewById(R.id.list_of_audios);
         songList=new SongList(this,itemList);
         listView.setAdapter(songList);
+
+       /* search=findViewById(R.id.imSearch);
+        search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                audiofile.setVisibility(View.GONE);
+                back.setVisibility(View.GONE);
+                search.setOnQueryTextListener(new OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        if(names.contains(query)) {
+                            songList.getFilter().filter(query);
+                        }
+                        else {
+                            Toasty.info(getApplicationContext(),"No Match Found",Toast.LENGTH_LONG).show();
+                        }
+                        return false;
+                    }
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
+                        songList.getFilter().filter(newText);
+                        return false;
+                    }
+                });
+
+            }
+        });
+        back=findViewById(R.id.backarrow);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });*/
+
+
     }
 
     @Override
@@ -200,7 +229,7 @@ public class MainActivity extends AppCompatActivity {
         inflator.inflate(R.menu.menu_source,menu);
         MenuItem item=menu.getItem(0);
         final SearchView searchView = (SearchView) item.getActionView();
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        searchView.setOnQueryTextListener(new OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 if(names.contains(query)) {
@@ -258,7 +287,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         catch (FileNotFoundException e){
-            Bitmap icon = BitmapFactory.decodeResource(getResources(),R.drawable.aw_ic_default_album);
+            Bitmap icon = BitmapFactory.decodeResource(getResources(),R.drawable.audio_icon);
             return icon;
         }
         catch (IOException e) {
@@ -266,6 +295,7 @@ public class MainActivity extends AppCompatActivity {
         }
         return image;
     }
+
     class Audio {
         private final Uri uri;
         private final String name;

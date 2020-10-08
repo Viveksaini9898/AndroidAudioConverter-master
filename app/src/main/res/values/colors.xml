@@ -3,6 +3,9 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4050</color>
-    <color name="holo_red">#ffcc0000</color>
+    <color name="colorRedDark">#ffcc0000</color>
     <color name="colorLightGrey">#807A7A</color>
+    <color name="colorWhite">#ffffff</color>
+    <color name="colorBlack">#000000</color>
+    <color name="pressColor">#A9A9F5</color>
 </resources>

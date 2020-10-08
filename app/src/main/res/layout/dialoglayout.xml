@@ -2,24 +2,29 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/dialogLayout"
-    android:layout_width="300dp"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginStart="20dp"
+    android:layout_marginEnd="20dp"
+    android:layout_marginTop="10dp"
+    android:layout_marginBottom="10dp"
     android:orientation="vertical">
     <TextView
         android:layout_marginTop="10dp"
-        android:paddingLeft="20dp"
         android:text="Convert"
-        android:textSize="20dp"
+        android:textSize="16dp"
+        android:textStyle="bold"
         android:textColor="@android:color/black"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         />
     <TextView
         android:layout_marginTop="10dp"
-        android:paddingLeft="20dp"
         android:text="File Name"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="@color/colorLightGrey"
+        android:textStyle="bold"
     />
     <EditText
         android:id="@+id/filename"
@@ -27,80 +32,96 @@
         android:layout_height="wrap_content"
         android:scrollHorizontally="true"
         android:singleLine="true"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:paddingRight="15dp"
+        android:textColor="@color/colorLightGrey"
         />
     <TextView
-        android:id="@+id/tx_exist"
-        android:layout_width="wrap_content"
+        android:id="@+id/txexist"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scrollHorizontally="true"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
         android:visibility="gone"
-        android:textColor="@color/holo_red"
+        android:layout_marginStart="2dp"
+        android:textColor="@color/colorRedDark"
         android:text="@string/already_exists"
         />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:layout_marginTop="20dp"
         >
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Format"
-            android:paddingLeft="20dp"
+            android:layout_marginEnd="10dp"
+            android:layout_weight="0"
+            android:textStyle="bold"
+            android:textColor="@color/colorLightGrey"
             />
         <Spinner
             android:id="@+id/format"
-            android:layout_width="150dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:entries="@array/formats"
-            android:layout_marginLeft="50dp"
+            android:paddingStart="60dp"
+            android:layout_weight="1"
+            android:outlineSpotShadowColor="@color/colorWhite"
             />
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:layout_marginTop="20dp"
+
         >
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Bitrate"
-            android:paddingLeft="20dp"
+            android:layout_marginEnd="10dp"
+            android:layout_weight="0"
+            android:textStyle="bold"
+            android:textColor="@color/colorLightGrey"
             />
         <Spinner
             android:id="@+id/bitrate"
-            android:layout_width="150dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:entries="@array/bitrates"
-            android:layout_marginLeft="50dp"
-            />
+            android:paddingStart="60dp"
+            android:layout_weight="1"
+            android:outlineSpotShadowColor="@color/colorWhite"            />
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="40dp"
-        android:paddingBottom="12dp"
+        android:gravity="right"
+        android:layout_marginTop="30dp"
         >
-    <Button
+    <TextView
         android:id="@+id/cancel"
         android:text="@string/cancel"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="100dp"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:padding="8dp"
+        android:layout_marginEnd="5dp"
+        android:textColor="#9c0000"
+        android:textStyle="bold"
         />
-    <Button
+    <TextView
         android:id="@+id/convert"
         android:text="@string/convert"
         android:layout_width="wrap_content"
-        android:layout_height="38dp"
+        android:layout_height="match_parent"
         android:textColor="@android:color/white"
-        android:background="@color/colorPrimaryDark"
+        android:background="@drawable/button_background"
+        android:gravity="center"
+        android:textStyle="bold"
+
         />
     </LinearLayout>
 </LinearLayout>

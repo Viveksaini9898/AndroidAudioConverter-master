@@ -1,13 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
-<ListView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/list_of_audios"
+
+   <!-- <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:background="#a62121"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:fitsSystemWindows="true" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/backarrow"
+                android:src="@drawable/back_arrow_white_24dp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/tvAudiofile"
+                android:text="Audio files"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:textSize="20dp"
+                android:layout_centerInParent="true"
+
+                />
+
+            <SearchView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/imSearch"
+                android:searchIcon="@drawable/search_white_24dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginEnd="10dp"
+                />
+        </RelativeLayout>
+
+    </androidx.appcompat.widget.Toolbar>
+-->
+    <ListView
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"
+         android:id="@+id/list_of_audios"
+         android:layout_marginTop="10dp"
     />
-</LinearLayout>
+</RelativeLayout>

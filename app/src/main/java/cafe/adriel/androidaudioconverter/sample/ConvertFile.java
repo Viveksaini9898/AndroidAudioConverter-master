@@ -4,16 +4,12 @@ import android.Manifest;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.drawable.ColorDrawable;
-import android.icu.util.ICUUncheckedIOException;
 import android.media.MediaPlayer;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
-
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,6 +21,9 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -74,7 +73,7 @@ public class ConvertFile extends AppCompatActivity implements MarkerView.MarkerL
         left =  findViewById(R.id.leftText);
         right =  findViewById(R.id.rightText);
         playImage= findViewById(R.id.play);
-        playFromLeft= findViewById(R.id.play_from_left);
+        playFromLeft= findViewById(R.id.skipPrevious);
         sbChangeSeekPosition=findViewById(R.id.sbChangeSeekPosition);
         differenceText =findViewById(R.id.difference);
         duration=Integer.parseInt(getIntent().getStringExtra("duration"));
@@ -205,13 +204,13 @@ public class ConvertFile extends AppCompatActivity implements MarkerView.MarkerL
                                              }
                                              if(mediaPlayer!=null&&!mediaPlayer.isPlaying()) {
                                                  mediaPlayer.start();
-                                                 playImage.setImageResource(R.drawable.pause);
+                                                 playImage.setImageResource(R.drawable.pause_black_24dp);
                                                  star();
                                              }
                                              else
                                              {
                                                  mediaPlayer.pause();
-                                                 playImage.setImageResource(R.drawable.play);
+                                                 playImage.setImageResource(R.drawable.play_arrow_black_24dp);
                                              }
                                          }
                                      });
@@ -235,7 +234,7 @@ public class ConvertFile extends AppCompatActivity implements MarkerView.MarkerL
                 mediaPlayer.seekTo(currentSongPosition);
                     mediaPlayer.start();
                     upDateSeekBar();
-                    playImage.setImageResource(R.drawable.pause);
+                    playImage.setImageResource(R.drawable.pause_black_24dp);
             }
         });
         leftView.setOnTouchListener(new View.OnTouchListener() {
@@ -742,7 +741,7 @@ public class ConvertFile extends AppCompatActivity implements MarkerView.MarkerL
           mediaPlayer.seekTo(currentProgress);
           sbChangeSeekPosition.setProgress(currentProgress);
           mediaPlayer.pause();
-          playImage.setImageResource(R.drawable.play);
+          playImage.setImageResource(R.drawable.play_arrow_black_24dp);
           currentSongPosition = sbChangeSeekPosition.getProgress();
       }
         else {

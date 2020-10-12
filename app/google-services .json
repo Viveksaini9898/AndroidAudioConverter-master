@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "520581114557",
+    "firebase_url": "https://mp3-cutter-1cf33.firebaseio.com",
+    "project_id": "mp3-cutter-1cf33",
+    "storage_bucket": "mp3-cutter-1cf33.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:520581114557:android:1a53a847cefb8c0f9ae5d4",
+        "android_client_info": {
+          "package_name": "cafe.adriel.androidaudioconverter.sample"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "520581114557-0oniopfa6addc3gh7jnkae5ojf1366g8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAb8q3jpQBQ-5uR60wXlZp5s_i1e2XGIdo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "520581114557-0oniopfa6addc3gh7jnkae5ojf1366g8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

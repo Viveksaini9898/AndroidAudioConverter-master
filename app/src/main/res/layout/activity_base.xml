@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="10dp"
+    android:gravity="bottom"
+    android:orientation="vertical"
     android:background="@color/colorWhite"
     tools:context=".BaseActivity"
     >
@@ -15,47 +18,45 @@
 -->
 
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/relative"
-        android:layout_marginBottom="10dp"
         >
 
         <LinearLayout
-            android:layout_height="wrap_content"
-            android:layout_width="165dp"
-            android:layout_marginStart="10dp"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
             android:padding="10dp"
+            android:layout_weight="1"
             android:id="@+id/audiocutter"
+
             android:background="@drawable/gradient_dark_pink"
             android:orientation="vertical">
 
             <ImageView
                 android:layout_width="50dp"
                 android:layout_height="50dp"
+                android:scaleType="centerInside"
                 android:src="@drawable/music_white_24dp"/>
-
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14dp"
-                android:textColor="@color/colorWhite"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="10dp"
+                android:textColor="@color/colorWhite"
                 android:text="Audio Cutter" />
-
-
 
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="165dp"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_marginStart="10dp"
             android:padding="10dp"
             android:id="@+id/audiomerge"
+            android:layout_weight="1"
             android:background="@drawable/gradient_pink_background"
             android:layout_toRightOf="@+id/audiocutter"
             android:orientation="vertical">
@@ -63,44 +64,46 @@
             <ImageView
                 android:layout_width="50dp"
                 android:layout_height="50dp"
+                android:scaleType="centerInside"
                 android:src="@drawable/add_white_24dp"/>
 
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Audio Merge"
                 android:textSize="14dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginBottom="10dp"
                 android:textColor="@color/colorWhite"
-                android:layout_marginTop="20dp"
                 />
 
         </LinearLayout>
-    </RelativeLayout>
+    </LinearLayout>
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/relative"
-        android:layout_marginBottom="20dp"
+        android:layout_marginTop="10dp"
         android:layout_alignParentBottom="true">
 
         <LinearLayout
-            android:layout_height="wrap_content"
-            android:layout_width="165dp"
-            android:layout_marginStart="10dp"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
             android:padding="10dp"
             android:id="@+id/ringtonecutter"
+            android:layout_weight="1"
             android:background="@drawable/gradient_light_blue"
             android:orientation="vertical">
 
             <ImageView
                 android:layout_width="50dp"
                 android:layout_height="50dp"
+                android:scaleType="centerInside"
                 android:src="@drawable/music_white_24dp"/>
 
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14dp"
                 android:textColor="@color/colorWhite"
@@ -112,32 +115,33 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="165dp"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_marginStart="10dp"
             android:padding="10dp"
             android:id="@+id/outputfolder"
+            android:layout_weight="1"
             android:background="@drawable/gradient_blue"
             android:layout_toRightOf="@+id/ringtonecutter"
             android:orientation="vertical">
-
             <ImageView
                 android:layout_width="50dp"
                 android:layout_height="50dp"
+                android:scaleType="centerInside"
                 android:src="@drawable/add_white_24dp"/>
 
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Output Folder"
                 android:textSize="14dp"
-                android:layout_marginBottom="10dp"
                 android:textColor="@color/colorWhite"
                 android:layout_marginTop="20dp"
-                />
+                android:layout_marginBottom="10dp"
+                    />
 
         </LinearLayout>
-    </RelativeLayout>
+    </LinearLayout>
 
 
-</RelativeLayout>
+</LinearLayout>

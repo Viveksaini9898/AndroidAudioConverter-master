@@ -35,7 +35,7 @@ public class AudioMergerOutput extends Fragment implements DataFetcherListener {
             @NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         view= inflater.inflate(R.layout.audio_merger_output, container, false);
-        new DataFetcherAsyncTask(getContext(), this,selection,selectionArgs).execute();
+        //new DataFetcherAsyncTask(getContext(), this,selection,selectionArgs).execute();
         return view;
     }
 

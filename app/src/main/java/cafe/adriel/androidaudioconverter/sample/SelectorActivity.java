@@ -13,13 +13,18 @@ import es.dmoral.toasty.Toasty;
 public class SelectorActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     SelectorAdapter selectorAdapter;
+    Boolean added=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_selector);
+        Bundle extras = getIntent().getExtras();
+        if(extras!=null) {
+            added = (Boolean) extras.get("added");
+        }
         recyclerView=findViewById(R.id.selectAction);
         recyclerView.setLayoutManager(new GridLayoutManager(this,2));
-        selectorAdapter=new SelectorAdapter(this);
+        selectorAdapter=new SelectorAdapter(this,added);
         recyclerView.setAdapter(selectorAdapter);
     }
     boolean doubleBackToExitPressedOnce = false;

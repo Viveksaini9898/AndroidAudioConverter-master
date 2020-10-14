@@ -13,8 +13,10 @@ import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.SearchView;
 import android.widget.SearchView.OnQueryTextListener;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -34,6 +36,9 @@ import cafe.adriel.androidaudioconverter.sample.listener.DataFetcherListener;
 public class AudioMergerActivity extends AppCompatActivity implements DataFetcherListener {
     RecyclerView recyclerView;
     private AudioMergerAdapter songListAdapter;
+    private Button next;
+    private TextView numOfFiles;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -144,10 +149,11 @@ public class AudioMergerActivity extends AppCompatActivity implements DataFetche
     public void onDataFetched(List<ItemsModel> itemsModelList) {
         if (songListAdapter == null){
             recyclerView=findViewById(R.id.list_of_audios);
+            next=findViewById(R.id.btn_next);
+            numOfFiles=findViewById(R.id.tv_files);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
-            songListAdapter=new AudioMergerAdapter(this,itemsModelList);
+            songListAdapter=new AudioMergerAdapter(this,itemsModelList,next,numOfFiles);
             recyclerView.setAdapter(songListAdapter);
-
         }else{
             songListAdapter.updateDataAndNotify(itemsModelList);
         }

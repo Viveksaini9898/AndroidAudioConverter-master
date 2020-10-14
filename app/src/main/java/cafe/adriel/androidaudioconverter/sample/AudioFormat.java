@@ -1,4 +1,4 @@
-package cafe.adriel.androidaudioconverter.model;
+package cafe.adriel.androidaudioconverter.sample;
 
 public enum AudioFormat {
     AAC,

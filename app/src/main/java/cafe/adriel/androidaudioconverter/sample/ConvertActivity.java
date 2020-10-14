@@ -1,6 +1,8 @@
 package cafe.adriel.androidaudioconverter.sample;
 
 import android.Manifest;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -9,18 +11,19 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
 
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
@@ -30,9 +33,8 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.IOException;
 
-import cafe.adriel.androidaudioconverter.AndroidAudioConverter;
-import cafe.adriel.androidaudioconverter.callback.IConvertCallback;
-import cafe.adriel.androidaudioconverter.model.AudioFormat;
+import cafe.adriel.androidaudioconverter.sample.AndroidAudioConverter;
+import cafe.adriel.androidaudioconverter.sample.callback.IConvertCallback;
 
 public class ConvertActivity extends AppCompatActivity implements Runnable {
 
@@ -50,7 +52,8 @@ public class ConvertActivity extends AppCompatActivity implements Runnable {
     float volume;
     int position, currentPosition;
     String bitrate;
-    View settings,playerDisplay;
+    Button backgroundConvert;
+    View settings,playerDisplay,progressDisplay;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +66,9 @@ public class ConvertActivity extends AppCompatActivity implements Runnable {
         share = findViewById(R.id.share);
         progressIndicator=findViewById(R.id.progressIndicator);
         settings=findViewById(R.id.settings);
+        backgroundConvert=findViewById(R.id.background);
         playerDisplay=findViewById(R.id.playerDisplay);
+        progressDisplay=findViewById(R.id.progressDisplay);
         openwith = findViewById(R.id.openwith);
         setas = findViewById(R.id.setas);
         txSize=findViewById(R.id.size);
@@ -83,8 +88,16 @@ public class ConvertActivity extends AppCompatActivity implements Runnable {
         convertAudio(format,outputFile,bitrate,volume);
         setListeners();
     }
-
     private void setListeners() {
+        backgroundConvert.setOnClickListener(new View.OnClickListener() {
+                                                 @Override
+                                                 public void onClick(View view) {
+                                                     Intent intent = new Intent(ConvertActivity.this,SelectorActivity.class);
+                                                        intent.putExtra("added",true);
+                                                     startActivity(intent);
+                                                 }
+                                             }
+        );
         share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -119,7 +132,6 @@ public class ConvertActivity extends AppCompatActivity implements Runnable {
                     Toast.makeText(getApplicationContext(), "Please, allow system settings ", Toast.LENGTH_LONG).show();
             }
         });
-
         play_pause_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -169,10 +181,10 @@ public class ConvertActivity extends AppCompatActivity implements Runnable {
                 Toast.makeText(ConvertActivity.this, "SUCCESS: " + convertedFile.getPath(), Toast.LENGTH_LONG).show();
                outputFile=convertedFile;
                 long size_long= outputFile.length();
+                progressDisplay.setVisibility(View.GONE);
                 txSize.setVisibility(View.VISIBLE);
                 playerDisplay.setVisibility(View.VISIBLE);
                 settings.setVisibility(View.VISIBLE);
-                progressIndicator.setVisibility(View.GONE);
                 txSize.setText(format(size_long,1));
                 //absolute_path=Environment.getExternalStorageDirectory()+extras.get("converted filename").toString();
                 mediaPlayer = new MediaPlayer();
@@ -222,6 +234,7 @@ public class ConvertActivity extends AppCompatActivity implements Runnable {
     }
     @Override
     protected void onPause() {
+        if(mediaPlayer!=null)
         mediaPlayer.pause();
         super.onPause();
     }
@@ -280,6 +293,7 @@ public class ConvertActivity extends AppCompatActivity implements Runnable {
 
     protected void onDestroy() {
         super.onDestroy();
+        if(mediaPlayer!=null)
         mediaPlayer.pause();
     }
 

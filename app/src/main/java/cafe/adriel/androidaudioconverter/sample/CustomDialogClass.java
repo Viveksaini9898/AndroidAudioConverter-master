@@ -1,6 +1,5 @@
 package cafe.adriel.androidaudioconverter.sample;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.media.MediaExtractor;
@@ -24,7 +23,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import cafe.adriel.androidaudioconverter.model.AudioFormat;
 public class CustomDialogClass extends Dialog implements
         android.view.View.OnClickListener {
     AudioFormat format;

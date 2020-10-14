@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.Filter;
@@ -26,19 +27,26 @@ public class AudioMergerAdapter extends RecyclerView.Adapter<AudioMergerAdapter.
     private ArrayList<ItemsModel> itemsModelListFiltered;
     private ArrayList<ItemsModel> itemsModelList;
     RequestOptions requestOptions;
+    Button next;
+    TextView numOfFiles;
+    int count=0;
     private static ArrayList<Boolean> selectedItemPos;
+    private static ArrayList<ItemsModel> selectedItems;
     // RecyclerView recyclerView;
-    public AudioMergerAdapter(Activity context, List<ItemsModel> itemsModelList) {
+    public AudioMergerAdapter(Activity context, List<ItemsModel> itemsModelList, Button next,TextView numOfFiles) {
         super();
         this.context = context;
         this.itemsModelListFiltered = (ArrayList<ItemsModel>) itemsModelList;
         this.itemsModelList=(ArrayList<ItemsModel>) itemsModelList;
         requestOptions = new RequestOptions();
         selectedItemPos=new ArrayList<>(itemsModelList.size());
+        this.next=next;
+        this.numOfFiles=numOfFiles;
         for(int i=0;i<itemsModelList.size();i++)
             selectedItemPos.add(false);
         requestOptions.placeholder(R.drawable.aw_ic_default_album);
     }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
@@ -65,10 +73,16 @@ public class AudioMergerAdapter extends RecyclerView.Adapter<AudioMergerAdapter.
         holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked)
-                    selectedItemPos.set(position,true);
-                else
-                    selectedItemPos.set(position,false);
+                if(isChecked) {
+                    selectedItemPos.set(position, true);
+                    count++;
+                    numOfFiles.setText(count+" files");
+                }
+                else {
+                    selectedItemPos.set(position, false);
+                    count--;
+                    numOfFiles.setText(count+" files");
+                }
             }
         });
         if(selectedItemPos.get(position)){
@@ -77,6 +91,18 @@ public class AudioMergerAdapter extends RecyclerView.Adapter<AudioMergerAdapter.
         else{
             holder.checkBox.setChecked(false);
         }
+        next.setOnClickListener(new View.OnClickListener(
+
+        ) {
+            @Override
+            public void onClick(View view) {
+                    for(int i=0;i<selectedItemPos.size();i++)
+                    {
+                        if(selectedItemPos.get(i))
+                        selectedItems.add(itemsModelListFiltered.get(i));
+                    }
+            }
+        });
     }
     @Override
     public Filter getFilter() {

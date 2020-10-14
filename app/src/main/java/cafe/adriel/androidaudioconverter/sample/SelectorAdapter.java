@@ -2,12 +2,15 @@ package cafe.adriel.androidaudioconverter.sample;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.media.Image;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,9 +22,11 @@ public class SelectorAdapter extends RecyclerView.Adapter<SelectorAdapter.ViewHo
     private Activity context;
     List<Integer> imageList;
     List<String> textList;
-    public SelectorAdapter(Activity context) {
+    Boolean added;
+    public SelectorAdapter(Activity context,Boolean added) {
         super();
         this.context = context;
+        this.added=added;
         imageList=new ArrayList<>();
         imageList.add(R.drawable.video_cutter);
         imageList.add(R.drawable.video_to_audio);
@@ -72,6 +77,8 @@ public class SelectorAdapter extends RecyclerView.Adapter<SelectorAdapter.ViewHo
             }
 
             if(position==4) {
+                if(added)
+                    holder.addedNew.setVisibility(View.VISIBLE);
                 holder.view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -88,10 +95,11 @@ public class SelectorAdapter extends RecyclerView.Adapter<SelectorAdapter.ViewHo
     }
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public ImageView imageView;
-        public TextView textView;
-        public View view;
+        public TextView textView,addedNew;
+        public RelativeLayout view;
         public ViewHolder(View itemView) {
             super(itemView);
+            addedNew =  itemView.findViewById(R.id.addedNew);
             this.imageView =  itemView.findViewById(R.id.image_to_select);
             this.textView =  itemView.findViewById(R.id.text_to_select);
             this.view = itemView.findViewById(R.id.item_view);

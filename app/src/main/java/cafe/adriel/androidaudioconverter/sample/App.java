@@ -1,10 +1,7 @@
 package cafe.adriel.androidaudioconverter.sample;
 
 import android.app.Application;
-
-import cafe.adriel.androidaudioconverter.AndroidAudioConverter;
-import cafe.adriel.androidaudioconverter.BuildConfig;
-import cafe.adriel.androidaudioconverter.callback.ILoadCallback;
+import cafe.adriel.androidaudioconverter.sample.callback.ILoadCallback;
 import es.dmoral.toasty.Toasty;
 
 public class App extends Application {

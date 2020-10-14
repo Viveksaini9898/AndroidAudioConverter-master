@@ -1,4 +1,4 @@
-package cafe.adriel.androidaudioconverter.callback;
+package cafe.adriel.androidaudioconverter.sample.callback;
 
 public interface ILoadCallback {
     

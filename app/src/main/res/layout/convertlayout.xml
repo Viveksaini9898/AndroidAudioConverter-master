@@ -59,11 +59,18 @@
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>
+    <RelativeLayout
+        android:id="@+id/progressDisplay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
    <ProgressBar
        android:id="@+id/progressIndicator"
-       android:layout_width="match_parent"
-       android:layout_height="10dp"
+       android:layout_width="200dp"
+       android:layout_height="5dp"
        android:layout_margin="15dp"
+       android:layout_centerHorizontal="true"
+       android:progressTint="@color/holo_red"
        style="@android:style/Widget.ProgressBar.Horizontal"
        />
     <TextView
@@ -71,8 +78,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:text=""
+        android:text="300%"
+        android:layout_marginTop="3dp"
+        android:layout_toLeftOf="@+id/progressIndicator"
         />
+    <Button
+        android:id="@+id/background"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_margin="30dp"
+        android:text="BACKGROUND CONVERTING"
+        android:textColor="@android:color/white"
+        android:backgroundTint="@color/holo_red"
+        />
+    </RelativeLayout>
     <LinearLayout
         android:id="@+id/playerDisplay"
         android:layout_width="match_parent"

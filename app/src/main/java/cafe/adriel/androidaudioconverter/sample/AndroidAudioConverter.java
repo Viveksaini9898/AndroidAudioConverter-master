@@ -1,13 +1,24 @@
-package cafe.adriel.androidaudioconverter;
-
-import android.app.ProgressDialog;
+package cafe.adriel.androidaudioconverter.sample;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Environment;
 import android.util.Log;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.core.app.NotificationCompat;
+
+/*
+import com.github.hiteshsondhi88.libffmpeg.FFmpeg;
+import com.github.hiteshsondhi88.libffmpeg.FFmpegExecuteResponseHandler;
+import com.github.hiteshsondhi88.libffmpeg.FFmpegLoadBinaryResponseHandler;
+import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegCommandAlreadyRunningException;
+*/
 
 import com.github.hiteshsondhi88.libffmpeg.FFmpeg;
 import com.github.hiteshsondhi88.libffmpeg.FFmpegExecuteResponseHandler;
@@ -20,9 +31,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.TimeZone;
 
-import cafe.adriel.androidaudioconverter.callback.IConvertCallback;
-import cafe.adriel.androidaudioconverter.callback.ILoadCallback;
-import cafe.adriel.androidaudioconverter.model.AudioFormat;
+import cafe.adriel.androidaudioconverter.sample.callback.IConvertCallback;
+import cafe.adriel.androidaudioconverter.sample.callback.ILoadCallback;
 
 public class AndroidAudioConverter {
 
@@ -38,12 +48,13 @@ public class AndroidAudioConverter {
     private int difference;
     ProgressBar progressBar;
     TextView progressPercent;
-    private AndroidAudioConverter(Context context,ProgressBar progressBar,TextView progressPercent){
+    NotificationCompat.Builder notification;
+    private AndroidAudioConverter(Context context, ProgressBar progressBar, TextView progressPercent){
         this.context = context;
         this.progressPercent=progressPercent;
         this.progressBar=progressBar;
     }
-    public AndroidAudioConverter setDuration(String durationLeft,String durationRight){
+    public AndroidAudioConverter setDuration(String durationLeft, String durationRight){
         this.durationLeft = durationLeft;
         this.durationRight=durationRight;
         return this;
@@ -73,7 +84,6 @@ public class AndroidAudioConverter {
                             loaded = true;
                             callback.onSuccess();
                         }
-
                         @Override
                         public void onFailure() {
                             loaded = false;
@@ -207,6 +217,7 @@ public class AndroidAudioConverter {
                                 progressBar.setProgress((int)sdf.parse("1970-01-01 " + duration).getTime());
                                 int progress=(int)progressBar.getProgress()*100/difference;
                                 progressPercent.setText(progress+"%");
+                                Downloadinbackgroud(progress,"Converting progress: "+progress+"%");
                             }catch (ParseException e)
                             {
                                 e.printStackTrace();
@@ -238,6 +249,35 @@ public class AndroidAudioConverter {
         }
         catch (Exception e){
             callback.onFailure(e);
+        }
+    }
+    void Downloadinbackgroud(int progressPercentage,String title) {
+        Intent intent=new Intent(context,OutputFoldersActivity.class);
+        PendingIntent pIntent = PendingIntent.getActivity(context, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel("1", "noti", NotificationManager.IMPORTANCE_DEFAULT);
+            channel.enableLights(true);
+            channel.enableVibration(false);
+            channel.setImportance(NotificationManager.IMPORTANCE_LOW);
+            notificationManager.createNotificationChannel(channel);
+        }
+        notification = new NotificationCompat.Builder(context, "1")
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle(title)
+                .setAutoCancel(true)
+                .setContentText(outputFile.getName())
+                .setOngoing(true);
+        notification.setProgress(100, progressPercentage, false);
+        notificationManager.notify(1, notification.build());
+        if(progressPercentage>=99)
+        {
+            notification.setProgress(0, 0, false)
+            .setContentTitle("Converted Sucessfully")
+            .setContentText(outputFile.getName())
+            .setOngoing(false)
+            .setContentIntent(pIntent);
+            notificationManager.notify(1,notification.build());
         }
     }
     private static File getConvertedFile(File originalFile, AudioFormat format){
